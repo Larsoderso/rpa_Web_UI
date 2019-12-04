@@ -8,7 +8,6 @@ import React, {
   type Node
 } from "react";
 import Avatar from "@atlaskit/avatar";
-import Drawer from "@atlaskit/drawer";
 import {
   DropdownItem,
   DropdownItemGroup,
@@ -25,6 +24,8 @@ import {
   ThemeProvider,
   modeGenerator
 } from "@atlaskit/navigation-next";
+import { Checkbox } from "@atlaskit/checkbox";
+import Drawer from "@atlaskit/drawer";
 
 import { BreadcrumbsStateless, BreadcrumbsItem } from "@atlaskit/breadcrumbs";
 import Button, { ButtonGroup } from "@atlaskit/button";
@@ -33,6 +34,15 @@ import Select from "@atlaskit/select";
 import Page from "@atlaskit/page";
 import AvatarGroup from "@atlaskit/avatar-group";
 import { AtlassianIcon } from "@atlaskit/logo";
+import Form, {
+  CheckboxField,
+  Field,
+  FormFooter,
+  HelperMessage,
+  ErrorMessage,
+  ValidMessage
+} from "@atlaskit/form";
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -42,11 +52,26 @@ import {
   useRouteMatch,
   Redirect
 } from "react-router-dom";
+import axios from "axios";
+// icons
+import SignOutIcon from "./icons/signout";
+import AddIcon from "./icons/plus_icon";
 
+import Blocks from "./modules/blocks";
+
+import PageHeader from "@atlaskit/page-header";
+import UseCases from "./modules/usecases";
+import SingInPage from "./modules/views/auth/signin";
+import InvitationPage from "./modules/views/auth/invitation_link";
+import UserMgmtIcon from "./icons/user_management";
+import UserMgmt from "./modules/views/account/user_mgmt";
+import SwitcherIcon from "./icons/switcher_icon";
+import RecurringJobs from "./icons/rjobs";
+
+import SideBar from "./modules/sidebar";
 function getAdorableAvatar(id: string, size: number = 80) {
   return `https://api.adorable.io/avatars/${size}/${id}.png`;
 }
-import PageHeader from "@atlaskit/page-header";
 
 function GaugeIcon() {
   return (
@@ -73,27 +98,30 @@ function GaugeIcon() {
 function ProdIcon() {
   return (
     <svg
-      width={158}
-      height={173}
-      viewBox="0 0 158 173"
+      width={34}
+      height={37}
+      viewBox="0 0 34 37"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ width: "34px", height: "34px" }}
+      style={{ marginTop: "12px" }}
     >
       <path
-        d="M6.5 86C6.5 86 39.1497 72.0838 50 54C60.6702 36.2163 58 1.5 58 1.5"
-        stroke="white"
-        strokeWidth={29}
+        d="M2 18.447C2 18.447 8.74129 15.5737 10.9816 11.8399C13.1847 8.16799 12.6334 1 12.6334 1"
+        stroke="#1A5FE5"
+        strokeOpacity="0.94"
+        strokeWidth={7}
       />
       <path
-        d="M151.797 86.5C151.797 86.5 119.147 72.5838 108.297 54.5C97.6269 36.7163 100.297 2 100.297 2"
-        stroke="white"
-        strokeWidth={29}
+        d="M32 18.5486C32 18.5486 25.2587 15.6753 23.0184 11.9414C20.8153 8.26956 21.3666 1.10156 21.3666 1.10156"
+        stroke="#1A5FE5"
+        strokeOpacity="0.94"
+        strokeWidth={7}
       />
       <path
-        d="M32.0001 124.857C32.0001 124.857 60.3766 103.54 81.4629 103.185C102.199 102.836 130.929 122.507 130.929 122.507"
-        stroke="white"
-        strokeWidth={29}
+        d="M7.2652 26.4699C7.2652 26.4699 13.1242 22.0684 17.478 21.9951C21.7594 21.9231 27.6914 25.9846 27.6914 25.9846"
+        stroke="#1A5FE5"
+        strokeOpacity="0.94"
+        strokeWidth={7}
       />
     </svg>
   );
@@ -108,9 +136,27 @@ function BuildingBlockIcon() {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect y={10} width={10} height={10} fill="white" />
-      <rect x={10} y={10} width={10} height={10} fill="white" />
-      <rect width={10} height={10} fill="white" />
+      <rect
+        y={10}
+        width={10}
+        height={10}
+        fill="white"
+        style={{ fill: "#42526d" }}
+      />
+      <rect
+        x={10}
+        y={10}
+        width={10}
+        height={10}
+        fill="white"
+        style={{ fill: "#42526d", y: 7, height: 16 }}
+      />
+      <rect
+        width={10}
+        height={10}
+        fill="white"
+        style={{ fill: "#42526d", height: 7, y: 4 }}
+      />
     </svg>
   );
 }
@@ -143,205 +189,7 @@ function Example() {
         "bs": "harness real-time e-markets"
       }
     },
-    {
-      "id": 2,
-      "name": "Ervin Howell",
-      "username": "Antonette",
-      "email": "Shanna@melissa.tv",
-      "address": {
-        "street": "Victor Plains",
-        "suite": "Suite 879",
-        "city": "Wisokyburgh",
-        "zipcode": "90566-7771",
-        "geo": {
-          "lat": "-43.9509",
-          "lng": "-34.4618"
-        }
-      },
-      "phone": "010-692-6593 x09125",
-      "website": "anastasia.net",
-      "company": {
-        "name": "Deckow-Crist",
-        "catchPhrase": "Proactive didactic contingency",
-        "bs": "synergize scalable supply-chains"
-      }
-    },
-    {
-      "id": 3,
-      "name": "Clementine Bauch",
-      "username": "Samantha",
-      "email": "Nathan@yesenia.net",
-      "address": {
-        "street": "Douglas Extension",
-        "suite": "Suite 847",
-        "city": "McKenziehaven",
-        "zipcode": "59590-4157",
-        "geo": {
-          "lat": "-68.6102",
-          "lng": "-47.0653"
-        }
-      },
-      "phone": "1-463-123-4447",
-      "website": "ramiro.info",
-      "company": {
-        "name": "Romaguera-Jacobson",
-        "catchPhrase": "Face to face bifurcated interface",
-        "bs": "e-enable strategic applications"
-      }
-    },
-    {
-      "id": 4,
-      "name": "Patricia Lebsack",
-      "username": "Karianne",
-      "email": "Julianne.OConner@kory.org",
-      "address": {
-        "street": "Hoeger Mall",
-        "suite": "Apt. 692",
-        "city": "South Elvis",
-        "zipcode": "53919-4257",
-        "geo": {
-          "lat": "29.4572",
-          "lng": "-164.2990"
-        }
-      },
-      "phone": "493-170-9623 x156",
-      "website": "kale.biz",
-      "company": {
-        "name": "Robel-Corkery",
-        "catchPhrase": "Multi-tiered zero tolerance productivity",
-        "bs": "transition cutting-edge web services"
-      }
-    },
-    {
-      "id": 5,
-      "name": "Chelsey Dietrich",
-      "username": "Kamren",
-      "email": "Lucio_Hettinger@annie.ca",
-      "address": {
-        "street": "Skiles Walks",
-        "suite": "Suite 351",
-        "city": "Roscoeview",
-        "zipcode": "33263",
-        "geo": {
-          "lat": "-31.8129",
-          "lng": "62.5342"
-        }
-      },
-      "phone": "(254)954-1289",
-      "website": "demarco.info",
-      "company": {
-        "name": "Keebler LLC",
-        "catchPhrase": "User-centric fault-tolerant solution",
-        "bs": "revolutionize end-to-end systems"
-      }
-    },
-    {
-      "id": 6,
-      "name": "Mrs. Dennis Schulist",
-      "username": "Leopoldo_Corkery",
-      "email": "Karley_Dach@jasper.info",
-      "address": {
-        "street": "Norberto Crossing",
-        "suite": "Apt. 950",
-        "city": "South Christy",
-        "zipcode": "23505-1337",
-        "geo": {
-          "lat": "-71.4197",
-          "lng": "71.7478"
-        }
-      },
-      "phone": "1-477-935-8478 x6430",
-      "website": "ola.org",
-      "company": {
-        "name": "Considine-Lockman",
-        "catchPhrase": "Synchronised bottom-line interface",
-        "bs": "e-enable innovative applications"
-      }
-    },
-    {
-      "id": 7,
-      "name": "Kurtis Weissnat",
-      "username": "Elwyn.Skiles",
-      "email": "Telly.Hoeger@billy.biz",
-      "address": {
-        "street": "Rex Trail",
-        "suite": "Suite 280",
-        "city": "Howemouth",
-        "zipcode": "58804-1099",
-        "geo": {
-          "lat": "24.8918",
-          "lng": "21.8984"
-        }
-      },
-      "phone": "210.067.6132",
-      "website": "elvis.io",
-      "company": {
-        "name": "Johns Group",
-        "catchPhrase": "Configurable multimedia task-force",
-        "bs": "generate enterprise e-tailers"
-      }
-    },
-    {
-      "id": 8,
-      "name": "Nicholas Runolfsdottir V",
-      "username": "Maxime_Nienow",
-      "email": "Sherwood@rosamond.me",
-      "address": {
-        "street": "Ellsworth Summit",
-        "suite": "Suite 729",
-        "city": "Aliyaview",
-        "zipcode": "45169",
-        "geo": {
-          "lat": "-14.3990",
-          "lng": "-120.7677"
-        }
-      },
-      "phone": "586.493.6943 x140",
-      "website": "jacynthe.com",
-      "company": {
-        "name": "Abernathy Group",
-        "catchPhrase": "Implemented secondary concept",
-        "bs": "e-enable extensible e-tailers"
-      }
-    },
-    {
-      "id": 9,
-      "name": "Glenna Reichert",
-      "username": "Delphine",
-      "email": "Chaim_McDermott@dana.io",
-      "address": {
-        "street": "Dayna Park",
-        "suite": "Suite 449",
-        "city": "Bartholomebury",
-        "zipcode": "76495-3109",
-        "geo": {
-          "lat": "24.6463",
-          "lng": "-168.8889"
-        }
-      },
-      "phone": "(775)976-6794 x41206",
-      "website": "conrad.com",
-      "company": {
-        "name": "Yost and Sons",
-        "catchPhrase": "Switchable contextually-based project",
-        "bs": "aggregate real-time technologies"
-      }
-    },
-    {
-      "id": 10,
-      "name": "Clementina DuBuque",
-      "username": "Moriah.Stanton",
-      "email": "Rey.Padberg@karina.biz",
-      "address": {
-        "street": "Kattie Turnpike",
-        "suite": "Suite 198",
-        "city": "Lebsackbury",
-        "zipcode": "31428-2261",
-        "geo": {
-          "lat": "-38.2386",
-          "lng": "57.2232"
-        }
-      },
+
       "phone": "024-648-3804",
       "website": "ambrose.net",
       "company": {
@@ -362,17 +210,38 @@ function Example() {
     </div>
   );
   const actionsContent = (
-    <ButtonGroup>
-      <Button appearance="primary">Primary Action</Button>
-      <Button>Default</Button>
-      <Button>...</Button>
-    </ButtonGroup>
+    <div
+      style={{
+        width: "260px",
+        height: "38px",
+        background: "#FA4616",
+        borderRadius: "5px",
+        display: "flex",
+        padding: "3px 12px",
+        color: "white",
+        lineHeight: "38px",
+        fontWeight: 500
+      }}
+    >
+      <svg
+        width={89}
+        height={30}
+        viewBox="0 0 89 30"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{ height: "28px", marginTop: "4px" }}
+      >
+        <path
+          d="M0 0H30V30H0V0ZM26.8854 26.8854V3.1146H3.11459V26.8707H26.8854V26.8854ZM5.81783 7.74241V16.807C5.81783 20.95 8.09501 23.4035 11.9442 23.4035C15.9109 23.4035 18.1881 20.95 18.1881 16.807V7.74241H15.0735V16.807C15.0735 19.143 14.0598 20.4652 12.0176 20.4652C9.85799 20.4652 8.90304 19.0842 8.90304 16.807V7.74241H5.81783ZM22.1988 9.59354C23.286 9.59354 24.1234 8.81489 24.1234 7.72772C24.1234 6.58178 23.3448 5.80313 22.1988 5.80313C21.1117 5.80313 20.2742 6.58178 20.2742 7.72772C20.2889 8.81489 21.1264 9.59354 22.1988 9.59354ZM20.6415 11.0333V23.2272H23.7561V11.0333H20.6415ZM39.241 18.2468C42.6053 18.2468 44.8237 16.2635 44.8237 12.9726C44.8237 9.79922 42.6641 7.7571 39.241 7.7571H33.3644V23.3007H36.479V18.3203H39.241V18.2468ZM38.8884 15.7786H36.4349V10.2547H38.8884C40.6954 10.2547 41.6504 11.2684 41.6504 12.9579C41.6504 14.7649 40.6807 15.7786 38.8884 15.7786ZM45.8521 17.1596C45.8521 20.8178 48.1881 23.4035 51.4937 23.4035C53.477 23.4035 54.7405 22.6836 55.4604 21.5377V23.2713H58.5749V11.0333H55.4604V12.9579C54.6817 11.6944 53.4182 10.9158 51.4937 10.9158C48.1293 10.9158 45.8521 13.5602 45.8521 17.1596ZM55.4457 17.1596C55.4457 19.2605 54.1234 20.6415 52.1988 20.6415C50.098 20.6415 49.0255 19.143 49.0255 17.1596C49.0255 15 50.2302 13.619 52.1988 13.619C54.1675 13.619 55.4457 15.0588 55.4457 17.1596ZM66.3614 20.5828C65.1567 20.5828 64.8629 20.0392 64.8629 18.9667V13.6778H67.5661V11.0333H64.8629V7.66895H61.7483V11.0333H60.3085V13.6778H61.7483V18.9667C61.7483 21.8462 63.0118 23.2272 66.0088 23.2272H67.6249V20.5828H66.3614ZM72.429 12.7816V7.02253H69.3144V23.286H72.429V16.807C72.429 14.7062 73.5162 13.4427 75.3673 13.4427C77.1744 13.4427 78.1293 14.6474 78.1293 16.4985V23.2272H81.2439V16.2047C81.2439 13.0313 78.9667 10.9305 76.0872 10.9305C74.2948 10.9158 73.1489 11.5769 72.429 12.7816ZM81.0088 6.96376V7.44858H82.0226V10.5632H82.6249V7.44858H83.5799V6.96376H81.0088ZM87.4878 6.96376L86.2243 9.84329L85.0196 6.96376H84.2997V10.5632H84.8433V7.80118L86.048 10.5632H86.4741L87.62 7.80118V10.5632H88.1636V6.96376H87.4878Z"
+          fill="white"
+        />
+      </svg>
+      <span style={{ marginLeft: "8px" }}> Open in Ui Path Studio </span>
+    </div>
   );
   const barContent = (
     <div style={{ display: "flex", paddingLeft: "12px" }}>
-      <div style={{ flex: "0 0 200px" }}>
-        <TextField isCompact placeholder="Filter" aria-label="Filter" />
-      </div>
+      <div style={{ flex: "0 0 200px" }} />
       <div style={{ flex: "0 0 200px", marginLeft: "auto" }}>
         <AvatarGroup
           appearance="stack"
@@ -380,7 +249,7 @@ function Example() {
           data={[
             { name: "Lars D", src: getAdorableAvatar("LarsD") },
             { name: "Konstantin R", src: getAdorableAvatar("KR") },
-            { name: "noah s", src: getAdorableAvatar("NoahS") },
+            { name: "Noah S", src: getAdorableAvatar("NoahS") },
             { name: "Tim T", src: getAdorableAvatar("TT") },
             { name: "Max Mustermann", src: getAdorableAvatar("M") },
             { name: "John Doe" }
@@ -392,13 +261,12 @@ function Example() {
   );
 
   return (
-    <diV
+    <div
       style={{
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        height: "100vh",
-        overflowY: "scroll"
+        height: "100vh"
       }}
     >
       <PageHeader
@@ -414,62 +282,131 @@ function Example() {
         text={exampleCodeBlock}
         highlight="2,5-7,12-15, 50-80"
       />
-    </diV>
+    </div>
   );
 }
 
+function CodePage() {
+  return (
+    <div style={{ display: "flex", flexDirection: "row", height: "100vh" }}>
+      <div
+        style={{
+          backgroundColor: colors.N20,
+          height: "100%",
+          overflow: "hidden",
+          padding: "8px 16px",
+          position: "relative",
+          width: `240px`
+        }}
+      />
+
+      <div
+        style={{
+          paddingLeft: "12px",
+          paddingTop: "12px",
+          display: "grid",
+          gridTemplateColumns: 5,
+          gridRowGap: "12px"
+        }}
+      >
+        <Link to="/ui/code/example">
+          <div
+            style={{
+              width: "280px",
+              height: "140px",
+              border: "1px solid #dfe1e6"
+            }}
+          >
+            <div style={{ width: "100%", height: "105px" }} />
+            <div style={{ width: "100%", height: "35px" }}>
+              <div
+                style={{
+                  display: "block",
+                  margin: "0 auto",
+                  width: "96%",
+                  height: "1px",
+                  background: "#e7f1f6"
+                }}
+              />
+              <div>
+                <AvatarGroup
+                  appearance="stack"
+                  height={30}
+                  onAvatarClick={console.log}
+                  data={[
+                    { name: "Lars D", src: getAdorableAvatar("LarsD") },
+                    { name: "Konstantin R", src: getAdorableAvatar("KR") },
+                    { name: "noah s", src: getAdorableAvatar("NoahS") },
+                    { name: "Tim T", src: getAdorableAvatar("TT") },
+                    { name: "Max Mustermann", src: getAdorableAvatar("M") },
+                    { name: "John Doe" }
+                  ]}
+                  size="large"
+                />
+              </div>
+            </div>
+          </div>
+        </Link>
+        <div
+          style={{
+            width: "280px",
+            height: "140px",
+            border: "1px solid #dfe1e6"
+          }}
+        />
+
+        <div>
+          <Link to="/ui/code/example">Link to Example Code</Link>
+        </div>
+      </div>
+    </div>
+  );
+}
 function UI() {
   const customMode = modeGenerator({
     product: {
-      text: colors.N0,
-      background: "#152E6E"
+      text: colors.N900,
+      background: colors.N20
+      // background: "#011720"
     }
   });
   let { path, url } = useRouteMatch();
   const [red, setredir] = useState(<div />);
+  function onClose() {
+    setDraweropen(false);
+    seAddDrawerState(false);
+  }
+  function onCloseComplete() {
+    setDraweropen(false);
+    seAddDrawerState(false);
+  }
+  const [isDrawerOpen, setDraweropen] = useState(false);
+  const [addDrawerState, seAddDrawerState] = useState(false);
 
+  const [newUserEmail, setnewUserMail] = useState("");
+  function openDrawer() {
+    setDraweropen(true);
+  }
+  function inviteNewUser() {
+    axios
+      .get(
+        `https://9001-f0b438fa-b62e-477b-a8bb-e37c54fcfe8a.ws-eu01.gitpod.io/invitation/` +
+          newUserEmail
+        // { user }
+      )
+      .then(res => {
+        setanmloading(false);
+        console.log(res);
+        console.log(res.data);
+      });
+  }
   return (
-    <ThemeProvider
-      theme={theme => ({ ...theme, mode: customMode, context: "product" })}
-    >
-      <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
-        <GlobalNav
-          primaryItems={[
-            {
-              icon: () => <ProdIcon />,
-              id: "logo",
-              onClick: () =>
-                setredir(
-                  <Redirect
-                    to={{
-                      pathname: "/ui/"
-                    }}
-                  />
-                )
-            },
-            {
-              icon: () => <BuildingBlockIcon />,
-              id: "logo",
-              tooltip: "Module",
-              onClick: () => console.log("Logo item clicked")
-            },
-            {
-              icon: () => <GaugeIcon />,
-              id: "logo",
-              tooltip: "Performance",
-              onClick: () =>
-                setredir(
-                  <Redirect
-                    to={{
-                      pathname: "/ui/code"
-                    }}
-                  />
-                )
-            }
-          ]}
-          secondaryItems={[]}
-        />
-        <diV
+    <div style={{ display: "flex", flexDirection: "row" }}>
+      <ThemeProvider
+        theme={theme => ({ ...theme, mode: customMode, context: "product" })}
+      >
+        <SideBar />
+        <div
           style={{
             display: "flex",
             flexDirection: "column",
@@ -481,18 +418,197 @@ function UI() {
           {red}
           <Switch>
             <Route exact path={`${path}/`}>
-              <div>Home</div>{" "}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                  height: "100vh",
+                  overflowY: "scroll"
+                }}
+              >
+                <div
+                  style={{
+                    width: "100%",
+                    height: "120px",
+                    borderBottom: "1px solid #efefef",
+                    flexShrink: 0
+                  }}
+                />
+                <div style={{ display: "flex" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      marginTop: "75px",
+                      paddingBottom: "8px",
+                      height: "75px"
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "320px",
+                        background: "rgb(255, 255, 255)",
+                        boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
+                        borderRadius: "8px",
+                        padding: "12px",
+                        marginLeft: "22px",
+                        marginTop: "22px",
+                        textAlign: "center",
+                        borderTop: "10px solid rgb(96, 125, 139)"
+                      }}
+                    >
+                      Idea
+                    </div>
+                    <div
+                      style={{
+                        width: "320px",
+                        background: "rgb(255, 255, 255)",
+                        boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
+                        borderRadius: "8px",
+                        padding: "12px",
+                        marginLeft: "22px",
+                        marginTop: "22px",
+                        textAlign: "center",
+                        borderTop: "10px solid rgb(70, 235, 198)"
+                      }}
+                    >
+                      Concept
+                    </div>
+                    <div
+                      style={{
+                        width: "320px",
+                        background: "rgb(255, 255, 255)",
+                        boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
+                        borderRadius: "8px",
+                        padding: "12px",
+                        marginLeft: "22px",
+                        marginTop: "22px",
+                        textAlign: "center",
+                        borderTop: "10px solid rgb(250, 70, 22)"
+                      }}
+                    >
+                      Development
+                    </div>
+                    <div
+                      style={{
+                        width: "320px",
+                        background: "rgb(255, 255, 255)",
+                        boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
+                        borderRadius: "8px",
+                        padding: "12px",
+                        marginLeft: "22px",
+                        marginTop: "22px",
+                        textAlign: "center",
+                        borderTop: "10px solid rgb(26, 95, 229)"
+                      }}
+                    >
+                      Testing
+                    </div>
+                    <div
+                      style={{
+                        width: "320px",
+                        background: "rgb(255, 255, 255)",
+                        boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
+                        borderRadius: "8px",
+                        padding: "12px",
+                        marginLeft: "22px",
+                        marginTop: "22px",
+                        textAlign: "center",
+                        borderTop: "10px solid rgb(28, 30, 59)"
+                      }}
+                    >
+                      Operation
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      width: "100%",
+                      background: "rgba(247, 247, 247, 0.12)",
+                      boxShadow: "0px 1px 4px rgba(157, 172, 202, 0.37)",
+                      height: "100vh",
+                      marginLeft: "14px"
+                    }}
+                  >
+                    <div
+                      style={{
+                        paddingLeft: "12px",
+                        paddingTop: "12px",
+                        paddingBottom: "12px",
+                        fontWeight: 500,
+                        fontSize: "16px"
+                      }}
+                    >
+                      Legende
+                    </div>
+                    <div
+                      style={{
+                        paddingLeft: "12px",
+                        display: "flex",
+                        paddingBottom: "4px",
+                        paddingTop: "4px"
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          boxShadow: "0px 1px 4px rgba(157, 172, 202, 0.37)",
+                          background: "#fa4615",
+                          borderRadius: "4px"
+                        }}
+                      />
+                      <div style={{ lineHeight: "30px", paddingLeft: "12px" }}>
+                        {" "}
+                        Abteilung A{" "}
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        paddingLeft: "12px",
+                        display: "flex",
+                        paddingTop: "4px"
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          boxShadow: "0px 1px 4px rgba(157, 172, 202, 0.37)",
+                          background: "#2cafea",
+                          borderRadius: "4px"
+                        }}
+                      />
+                      <div style={{ lineHeight: "30px", paddingLeft: "12px" }}>
+                        {" "}
+                        Abteilung B{" "}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </Route>
             <Route path={`${path}/users`}>
               <div>Users</div>
             </Route>
-            <Route path={`${path}/code`}>
+            <Route exact path={`${path}/projects`}>
+              <Blocks />{" "}
+            </Route>
+            <Route exact path={`${path}/code`}>
+              <CodePage />{" "}
+            </Route>
+            <Route exact path={`${path}/use-cases`}>
+              <UseCases />{" "}
+            </Route>
+            <Route exact path={`${path}/usermanagement`}>
+              <UserMgmt />
+            </Route>
+            <Route path={`${path}/code/example`}>
               <Example />{" "}
             </Route>
           </Switch>
-        </diV>
-      </div>
-    </ThemeProvider>
+        </div>
+      </ThemeProvider>
+    </div>
   );
 }
 
@@ -502,10 +618,17 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/">
-            <div>Home</div>{" "}
+            <SingInPage />
           </Route>
           <Route path="/users">
             <div>Users</div>
+          </Route>
+
+          <Route path="/invitation/:inv">
+            <InvitationPage />
+          </Route>
+          <Route path="/auth/reset">
+            <InvitationPage />
           </Route>
           <Route path="/ui">
             <UI />{" "}
