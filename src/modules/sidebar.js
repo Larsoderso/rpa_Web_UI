@@ -171,6 +171,7 @@ function SideBar() {
     <ThemeProvider
       theme={theme => ({ ...theme, mode: customMode, context: "product" })}
     >
+      {red}
       <Drawer
         onClose={onClose}
         onCloseComplete={onCloseComplete}
@@ -198,7 +199,7 @@ function SideBar() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 4fr 2fr",
+            gridTemplateColumns: "1fr",
             paddingTop: "22px",
             gridRowGap: "12px"
           }}
@@ -206,7 +207,11 @@ function SideBar() {
           <Link
             onClick={onClose}
             to="/ui/usermanagement"
-            style={{ display: "block", width: "100%" }}
+            style={{
+              width: "100%",
+              display: "grid",
+              gridTemplateColumns: "1fr 4fr 2fr"
+            }}
           >
             <div
               style={{
@@ -272,7 +277,9 @@ function SideBar() {
             paddingRight: "12px"
           }}
         >
-          <div
+          <Link
+            onClick={onClose}
+            to={path + "/usecase/new"}
             style={{
               boxShadow: "0px 1px 4px 1px rgba(0, 0, 0, 0.11)",
               borderRadius: "6px",
@@ -281,7 +288,8 @@ function SideBar() {
               boxSizing: "border-box",
               paddingTop: "12px",
               paddingLeft: "12px",
-              paddingBottom: "12px"
+              paddingBottom: "12px",
+              display: "flex"
             }}
           >
             <div
@@ -312,8 +320,13 @@ function SideBar() {
                 />
               </svg>
             </div>
-          </div>
-          <div
+
+            <div>Create new Use Case</div>
+          </Link>
+
+          <Link
+            onClick={onClose}
+            to={path + "/team/new"}
             style={{
               boxShadow: "0px 1px 4px 1px rgba(0, 0, 0, 0.11)",
               borderRadius: "6px",
@@ -361,7 +374,7 @@ function SideBar() {
                 />
               </svg>
             </div>
-          </div>
+          </Link>
         </div>
       </Drawer>
 
@@ -413,12 +426,6 @@ function SideBar() {
           }
         ]}
         secondaryItems={[
-          {
-            icon: () => <SwitcherIcon />,
-            id: "logo",
-            tooltip: "User Management",
-            onClick: () => setDraweropen(true)
-          },
           {
             icon: () => <UserMgmtIcon />,
             id: "logo",

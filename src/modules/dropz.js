@@ -12,11 +12,12 @@ function MyDropzone() {
     <div
       style={{
         borderRadius: "4px",
+        background: "#f1f7f96b",
         border: "1px solid #e3e9ef",
         margin: "16px 0",
         padding: "22px",
         marginLeft: "12px",
-        width: "800px"
+        width: "98%"
       }}
       {...getRootProps()}
     >

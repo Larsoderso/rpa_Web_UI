@@ -69,6 +69,10 @@ import SwitcherIcon from "./icons/switcher_icon";
 import RecurringJobs from "./icons/rjobs";
 
 import SideBar from "./modules/sidebar";
+import NewUseCase from "./modules/views/usecases/new";
+import NewTeam from "./modules/views/user_mgmt/newTeam";
+import ListUseCases from "./modules/views/usecases/list";
+import SingleUseCase from "./modules/views/usecases/use_case";
 function getAdorableAvatar(id: string, size: number = 80) {
   return `https://api.adorable.io/avatars/${size}/${id}.png`;
 }
@@ -435,156 +439,9 @@ function UI() {
                     flexShrink: 0
                   }}
                 />
-                <div style={{ display: "flex" }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      marginTop: "75px",
-                      paddingBottom: "8px",
-                      height: "75px"
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "320px",
-                        background: "rgb(255, 255, 255)",
-                        boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
-                        borderRadius: "8px",
-                        padding: "12px",
-                        marginLeft: "22px",
-                        marginTop: "22px",
-                        textAlign: "center",
-                        borderTop: "10px solid rgb(96, 125, 139)"
-                      }}
-                    >
-                      Idea
-                    </div>
-                    <div
-                      style={{
-                        width: "320px",
-                        background: "rgb(255, 255, 255)",
-                        boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
-                        borderRadius: "8px",
-                        padding: "12px",
-                        marginLeft: "22px",
-                        marginTop: "22px",
-                        textAlign: "center",
-                        borderTop: "10px solid rgb(70, 235, 198)"
-                      }}
-                    >
-                      Concept
-                    </div>
-                    <div
-                      style={{
-                        width: "320px",
-                        background: "rgb(255, 255, 255)",
-                        boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
-                        borderRadius: "8px",
-                        padding: "12px",
-                        marginLeft: "22px",
-                        marginTop: "22px",
-                        textAlign: "center",
-                        borderTop: "10px solid rgb(250, 70, 22)"
-                      }}
-                    >
-                      Development
-                    </div>
-                    <div
-                      style={{
-                        width: "320px",
-                        background: "rgb(255, 255, 255)",
-                        boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
-                        borderRadius: "8px",
-                        padding: "12px",
-                        marginLeft: "22px",
-                        marginTop: "22px",
-                        textAlign: "center",
-                        borderTop: "10px solid rgb(26, 95, 229)"
-                      }}
-                    >
-                      Testing
-                    </div>
-                    <div
-                      style={{
-                        width: "320px",
-                        background: "rgb(255, 255, 255)",
-                        boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
-                        borderRadius: "8px",
-                        padding: "12px",
-                        marginLeft: "22px",
-                        marginTop: "22px",
-                        textAlign: "center",
-                        borderTop: "10px solid rgb(28, 30, 59)"
-                      }}
-                    >
-                      Operation
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      width: "100%",
-                      background: "rgba(247, 247, 247, 0.12)",
-                      boxShadow: "0px 1px 4px rgba(157, 172, 202, 0.37)",
-                      height: "100vh",
-                      marginLeft: "14px"
-                    }}
-                  >
-                    <div
-                      style={{
-                        paddingLeft: "12px",
-                        paddingTop: "12px",
-                        paddingBottom: "12px",
-                        fontWeight: 500,
-                        fontSize: "16px"
-                      }}
-                    >
-                      Legende
-                    </div>
-                    <div
-                      style={{
-                        paddingLeft: "12px",
-                        display: "flex",
-                        paddingBottom: "4px",
-                        paddingTop: "4px"
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: "30px",
-                          height: "30px",
-                          boxShadow: "0px 1px 4px rgba(157, 172, 202, 0.37)",
-                          background: "#fa4615",
-                          borderRadius: "4px"
-                        }}
-                      />
-                      <div style={{ lineHeight: "30px", paddingLeft: "12px" }}>
-                        {" "}
-                        Abteilung A{" "}
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        paddingLeft: "12px",
-                        display: "flex",
-                        paddingTop: "4px"
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: "30px",
-                          height: "30px",
-                          boxShadow: "0px 1px 4px rgba(157, 172, 202, 0.37)",
-                          background: "#2cafea",
-                          borderRadius: "4px"
-                        }}
-                      />
-                      <div style={{ lineHeight: "30px", paddingLeft: "12px" }}>
-                        {" "}
-                        Abteilung B{" "}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            
+      <div style={{display: 'grid', gridTemplateColumns: '4fr 1fr'}}><div style={{width: '100$', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr', marginTop: '75px', paddingBottom: '8px', height: '75px'}}><div style={{/* width: '320px', */background: 'rgb(255, 255, 255)', boxShadow: 'rgba(157, 172, 202, 0.45) 0px 1px 19px', borderRadius: '8px', padding: '12px', marginLeft: '22px', marginTop: '22px', textAlign: 'center', borderTop: '10px solid rgb(96, 125, 139)'}}>Idea</div><div style={{/* width: '320px', */background: 'rgb(255, 255, 255)', boxShadow: 'rgba(157, 172, 202, 0.45) 0px 1px 19px', borderRadius: '8px', padding: '12px', marginLeft: '22px', marginTop: '22px', textAlign: 'center', borderTop: '10px solid rgb(70, 235, 198)'}}>Concept</div><div style={{/* width: '320px', */background: 'rgb(255, 255, 255)', boxShadow: 'rgba(157, 172, 202, 0.45) 0px 1px 19px', borderRadius: '8px', padding: '12px', marginLeft: '22px', marginTop: '22px', textAlign: 'center', borderTop: '10px solid rgb(250, 70, 22)'}}>Development</div><div style={{/* width: '320px', */background: 'rgb(255, 255, 255)', boxShadow: 'rgba(157, 172, 202, 0.45) 0px 1px 19px', borderRadius: '8px', padding: '12px', marginLeft: '22px', marginTop: '22px', textAlign: 'center', borderTop: '10px solid rgb(26, 95, 229)'}}>Testing</div><div style={{/* width: '320px', */background: 'rgb(255, 255, 255)', boxShadow: 'rgba(157, 172, 202, 0.45) 0px 1px 19px', borderRadius: '8px', padding: '12px', marginLeft: '22px', marginTop: '22px', textAlign: 'center', borderTop: '10px solid rgb(28, 30, 59)'}}>Operation</div></div><div style={{width: '100%', background: 'rgba(247, 247, 247, 0.12)', boxShadow: 'rgba(157, 172, 202, 0.37) 0px 1px 4px', height: '100vh', marginLeft: '14px'}}><div style={{paddingLeft: '12px', paddingTop: '12px', paddingBottom: '12px', fontWeight: 500, fontSize: '16px'}}>Legende</div><div style={{paddingLeft: '12px', display: 'flex', paddingBottom: '4px', paddingTop: '4px'}}><div style={{width: '30px', height: '30px', boxShadow: 'rgba(157, 172, 202, 0.37) 0px 1px 4px', background: 'rgb(250, 70, 21)', borderRadius: '4px'}} /><div style={{lineHeight: '30px', paddingLeft: '12px'}}> Abteilung A </div></div><div style={{paddingLeft: '12px', display: 'flex', paddingTop: '4px'}}><div style={{width: '30px', height: '30px', boxShadow: 'rgba(157, 172, 202, 0.37) 0px 1px 4px', background: 'rgb(44, 175, 234)', borderRadius: '4px'}} /><div style={{lineHeight: '30px', paddingLeft: '12px'}}> Abteilung B </div></div></div></div>
+
               </div>
             </Route>
             <Route path={`${path}/users`}>
@@ -596,14 +453,29 @@ function UI() {
             <Route exact path={`${path}/code`}>
               <CodePage />{" "}
             </Route>
-            <Route exact path={`${path}/use-cases`}>
+            <Route exact path={`${path}/usecases`}>
               <UseCases />{" "}
+            </Route>
+
+            <Route exact path={`${path}/use-cases/`}>
+              <ListUseCases />{" "}
+            </Route>
+            <Route exact path={`${path}/use-cases/:id`}>
+              <SingleUseCase />{" "}
             </Route>
             <Route exact path={`${path}/usermanagement`}>
               <UserMgmt />
             </Route>
+
+            <Route path={`${path}/team/new`}>
+              <NewTeam />{" "}
+            </Route>
+
             <Route path={`${path}/code/example`}>
               <Example />{" "}
+            </Route>
+            <Route path={`${path}/usecase/new`}>
+              <NewUseCase />{" "}
             </Route>
           </Switch>
         </div>
