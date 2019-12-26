@@ -25,6 +25,7 @@ jobs:
         npm install package.json
       env:
         CI: true
+        #step that moves our files to ec2
     - name: Move files to our ec2 instance
       uses: appleboy/scp-action@master
       with:
