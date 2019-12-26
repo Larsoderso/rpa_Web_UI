@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [8.x, 10.x, 12.x]
+        node-version: [12.x]
 
     steps:
     - uses: actions/checkout@v1
@@ -20,6 +20,8 @@ jobs:
     - name: npm install, build, and test
       run: |
         npm -v
-        npm run react-scripts build
+        npm i react-scripts -g
+        npm install package.json
+        react-scripts build
       env:
         CI: true
