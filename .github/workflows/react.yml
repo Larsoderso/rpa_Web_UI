@@ -20,6 +20,6 @@ jobs:
     - name: npm install, build, and test
       run: |
         npm -v
-        npm run build --if-present
+        npm run react-scripts build
       env:
         CI: true
