@@ -1,0 +1,8 @@
+- name: Move files to our ec2 instance
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: ./public
+          remote: /
+          host: ${{ secrets.ip_ec }}
+          username: ${{ secrets.user_ec }}
+          passphrase: ${{ secrets.keyfile_ec }}
