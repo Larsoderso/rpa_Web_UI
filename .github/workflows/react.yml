@@ -26,11 +26,11 @@ jobs:
       env:
         CI: true
     - name: Move files to our ec2 instance
-      uses: garygrossgarten/github-action-scp@release
+      uses: appleboy/scp-action@master
       with:
-          local: ./public
-          remote: /
+          source: ./public
+          target: /
           host: ${{ secrets.ip_ec }}
           username: ${{ secrets.user_ec }}
-          passphrase: ${{ secrets.keyfile_ec }}
+          key: ${{ secrets.keyfile_ec }}
   
