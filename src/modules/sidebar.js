@@ -151,22 +151,6 @@ function SideBar() {
   const [isDrawerOpen, setDraweropen] = useState(false);
   const [addDrawerState, seAddDrawerState] = useState(false);
 
-  const [newUserEmail, setnewUserMail] = useState("");
-  function openDrawer() {
-    setDraweropen(true);
-  }
-  function inviteNewUser() {
-    axios
-      .get(
-        `https://9001-f0b438fa-b62e-477b-a8bb-e37c54fcfe8a.ws-eu01.gitpod.io/invitation/` +
-          newUserEmail
-        // { user }
-      )
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-      });
-  }
   return (
     <ThemeProvider
       theme={theme => ({ ...theme, mode: customMode, context: "product" })}
@@ -178,24 +162,6 @@ function SideBar() {
         isOpen={isDrawerOpen}
         width="wide"
       >
-        <div style={{ display: "flex" }}>
-          <TextField
-            value={newUserEmail}
-            onChange={e => setnewUserMail(e.target.value)}
-            type="E-Mail"
-            placeholder="E-Mail"
-            autoComplete="off"
-          />
-          <Button
-            onClick={inviteNewUser}
-            style={{ marginLeft: "12px", marginRight: "12px" }}
-            type="submit"
-            appearance="primary"
-          >
-            Nutzer einladen
-          </Button>
-        </div>
-
         <div
           style={{
             display: "grid",
@@ -320,10 +286,19 @@ function SideBar() {
                 />
               </svg>
             </div>
-
-            <div>Create new Use Case</div>
+            <div
+              style={{
+                lineHeight: "95px",
+                paddingLeft: "22px",
+                textDecoration: "none",
+                color: "#4b5668",
+                fontWeight: 400,
+                fontSize: "16px"
+              }}
+            >
+              Create new Use Case
+            </div>{" "}
           </Link>
-
           <Link
             onClick={onClose}
             to={path + "/team/new"}
@@ -336,13 +311,15 @@ function SideBar() {
               paddingTop: "12px",
               paddingLeft: "12px",
               paddingBottom: "12px",
-              marginTop: "15px"
+              display: "flex",
+              flexDirection: "row",
+              marginTop: "20px"
             }}
           >
             <div
               style={{
                 width: "95px",
-                height: "100%",
+                height: "95px",
                 background: "#204B9D",
                 borderRadius: "50%"
               }}
@@ -374,7 +351,19 @@ function SideBar() {
                 />
               </svg>
             </div>
-          </Link>
+            <div
+              style={{
+                lineHeight: "95px",
+                paddingLeft: "22px",
+                textDecoration: "none",
+                color: "#4b5668",
+                fontWeight: 400,
+                fontSize: "16px"
+              }}
+            >
+              Create a new team
+            </div>{" "}
+          </Link>{" "}
         </div>
       </Drawer>
 
