@@ -27,6 +27,8 @@ import {
 import { Checkbox } from "@atlaskit/checkbox";
 import Drawer from "@atlaskit/drawer";
 
+import ReactKanban from "react-kanban-dnd";
+
 import { BreadcrumbsStateless, BreadcrumbsItem } from "@atlaskit/breadcrumbs";
 import Button, { ButtonGroup } from "@atlaskit/button";
 import TextField from "@atlaskit/textfield";
@@ -53,6 +55,8 @@ import {
   Redirect
 } from "react-router-dom";
 import axios from "axios";
+
+import UsecaseViewSwitcher from "./modules/components/view_switcher_uc";
 // icons
 import SignOutIcon from "./icons/signout";
 import AddIcon from "./icons/plus_icon";
@@ -73,6 +77,7 @@ import NewUseCase from "./modules/views/usecases/new";
 import NewTeam from "./modules/views/user_mgmt/newTeam";
 import ListUseCases from "./modules/views/usecases/list";
 import SingleUseCase from "./modules/views/usecases/use_case";
+import KanbanBoard from "./modules/views/overview/kanban";
 function getAdorableAvatar(id: string, size: number = 80) {
   return `https://api.adorable.io/avatars/${size}/${id}.png`;
 }
@@ -391,6 +396,111 @@ function UI() {
   function openDrawer() {
     setDraweropen(true);
   }
+
+  const board = {
+    lanes: [
+      {
+        id: 1,
+        title: "Backlog",
+        cards: [
+          {
+            id: 1,
+            title: "Card title 1",
+            description: "Card content"
+          },
+          {
+            id: 2,
+            title: "Card title 2",
+            description: "Card content"
+          },
+          {
+            id: 3,
+            title: "Card title 3",
+            description: "Card content"
+          }
+        ]
+      },
+      {
+        id: 2,
+        title: "Doing",
+        cards: [
+          {
+            id: 9,
+            title: "Card title 9",
+            description: "Card content"
+          }
+        ]
+      },
+      {
+        id: 3,
+        title: "Q&A",
+        cards: [
+          {
+            id: 10,
+            title: "Card title 10",
+            description: "Card content"
+          },
+          {
+            id: 11,
+            title: "Card title 11",
+            description: "Card content"
+          }
+        ]
+      },
+      {
+        id: 4,
+        title: "Production",
+        cards: [
+          {
+            id: 12,
+            title: "Card title 12",
+            description: "Card content"
+          },
+          {
+            id: 13,
+            title: "Card title 13",
+            description: "Card content"
+          }
+        ]
+      }
+    ]
+  };
+
+  const columns = [
+    {
+      id: "column1",
+      title: "Column 1",
+      rows: [
+        {
+          id: "children1",
+          name: "John",
+          age: "21"
+        },
+        {
+          id: "children2",
+          name: "Alex",
+          age: "33"
+        }
+      ]
+    },
+    {
+      id: "column2",
+      title: "Column 2",
+      rows: [
+        {
+          id: "children3",
+          name: "Michael",
+          age: "29"
+        },
+        {
+          id: "children4",
+          name: "Carl",
+          age: "26"
+        }
+      ]
+    }
+  ];
+
   function inviteNewUser() {
     axios
       .get(
@@ -404,6 +514,20 @@ function UI() {
         console.log(res.data);
       });
   }
+
+  const renderCard = row => (
+    <RowWrapper>
+      <InfoWrapper>
+        <Label>Name:</Label>
+        <Value>{row.name}</Value>
+      </InfoWrapper>
+      <InfoWrapper>
+        <Label>Age:</Label>
+        <Value>{row.age}</Value>
+      </InfoWrapper>
+    </RowWrapper>
+  );
+
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
       <ThemeProvider
@@ -432,16 +556,268 @@ function UI() {
                 }}
               >
                 <div
-                  style={{
-                    width: "100%",
-                    height: "120px",
-                    borderBottom: "1px solid #efefef",
-                    flexShrink: 0
-                  }}
-                />
-            
-      <div style={{display: 'grid', gridTemplateColumns: '4fr 1fr'}}><div style={{width: '100$', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr', marginTop: '75px', paddingBottom: '8px', height: '75px'}}><div style={{/* width: '320px', */background: 'rgb(255, 255, 255)', boxShadow: 'rgba(157, 172, 202, 0.45) 0px 1px 19px', borderRadius: '8px', padding: '12px', marginLeft: '22px', marginTop: '22px', textAlign: 'center', borderTop: '10px solid rgb(96, 125, 139)'}}>Idea</div><div style={{/* width: '320px', */background: 'rgb(255, 255, 255)', boxShadow: 'rgba(157, 172, 202, 0.45) 0px 1px 19px', borderRadius: '8px', padding: '12px', marginLeft: '22px', marginTop: '22px', textAlign: 'center', borderTop: '10px solid rgb(70, 235, 198)'}}>Concept</div><div style={{/* width: '320px', */background: 'rgb(255, 255, 255)', boxShadow: 'rgba(157, 172, 202, 0.45) 0px 1px 19px', borderRadius: '8px', padding: '12px', marginLeft: '22px', marginTop: '22px', textAlign: 'center', borderTop: '10px solid rgb(250, 70, 22)'}}>Development</div><div style={{/* width: '320px', */background: 'rgb(255, 255, 255)', boxShadow: 'rgba(157, 172, 202, 0.45) 0px 1px 19px', borderRadius: '8px', padding: '12px', marginLeft: '22px', marginTop: '22px', textAlign: 'center', borderTop: '10px solid rgb(26, 95, 229)'}}>Testing</div><div style={{/* width: '320px', */background: 'rgb(255, 255, 255)', boxShadow: 'rgba(157, 172, 202, 0.45) 0px 1px 19px', borderRadius: '8px', padding: '12px', marginLeft: '22px', marginTop: '22px', textAlign: 'center', borderTop: '10px solid rgb(28, 30, 59)'}}>Operation</div></div><div style={{width: '100%', background: 'rgba(247, 247, 247, 0.12)', boxShadow: 'rgba(157, 172, 202, 0.37) 0px 1px 4px', height: '100vh', marginLeft: '14px'}}><div style={{paddingLeft: '12px', paddingTop: '12px', paddingBottom: '12px', fontWeight: 500, fontSize: '16px'}}>Legende</div><div style={{paddingLeft: '12px', display: 'flex', paddingBottom: '4px', paddingTop: '4px'}}><div style={{width: '30px', height: '30px', boxShadow: 'rgba(157, 172, 202, 0.37) 0px 1px 4px', background: 'rgb(250, 70, 21)', borderRadius: '4px'}} /><div style={{lineHeight: '30px', paddingLeft: '12px'}}> Abteilung A </div></div><div style={{paddingLeft: '12px', display: 'flex', paddingTop: '4px'}}><div style={{width: '30px', height: '30px', boxShadow: 'rgba(157, 172, 202, 0.37) 0px 1px 4px', background: 'rgb(44, 175, 234)', borderRadius: '4px'}} /><div style={{lineHeight: '30px', paddingLeft: '12px'}}> Abteilung B </div></div></div></div>
+                  style={{ display: "grid", gridTemplateColumns: "4fr 1fr" }}
+                >
+                  <div>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "20px",
+                        flexShrink: 0,
+                        padding: "12px"
+                      }}
+                    >
+                      <UsecaseViewSwitcher />
+                    </div>
 
+                    <div
+                      style={{
+                        width: "100$",
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
+                        marginTop: "75px",
+                        paddingBottom: "8px",
+                        height: "15px"
+                      }}
+                    >
+                      <div
+                        style={{
+                          /* width: '320px', */ background:
+                            "rgb(255, 255, 255)",
+                          boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
+                          borderRadius: "8px",
+                          padding: "12px",
+                          marginLeft: "22px",
+                          marginTop: "22px",
+                          textAlign: "center",
+                          borderTop: "10px solid rgb(96, 125, 139)"
+                        }}
+                      >
+                        Idea
+                      </div>
+                      <div
+                        style={{
+                          /* width: '320px', */ background:
+                            "rgb(255, 255, 255)",
+                          boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
+                          borderRadius: "8px",
+                          padding: "12px",
+                          marginLeft: "22px",
+                          marginTop: "22px",
+                          textAlign: "center",
+                          borderTop: "10px solid rgb(70, 235, 198)"
+                        }}
+                      >
+                        Concept
+                      </div>
+                      <div
+                        style={{
+                          /* width: '320px', */ background:
+                            "rgb(255, 255, 255)",
+                          boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
+                          borderRadius: "8px",
+                          padding: "12px",
+                          marginLeft: "22px",
+                          marginTop: "22px",
+                          textAlign: "center",
+                          borderTop: "10px solid rgb(250, 70, 22)"
+                        }}
+                      >
+                        Development
+                      </div>
+                      <div
+                        style={{
+                          /* width: '320px', */ background:
+                            "rgb(255, 255, 255)",
+                          boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
+                          borderRadius: "8px",
+                          padding: "12px",
+                          marginLeft: "22px",
+                          marginTop: "22px",
+                          textAlign: "center",
+                          borderTop: "10px solid rgb(26, 95, 229)"
+                        }}
+                      >
+                        Testing
+                      </div>
+                      <div
+                        style={{
+                          /* width: '320px', */ background:
+                            "rgb(255, 255, 255)",
+                          boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
+                          borderRadius: "8px",
+                          padding: "12px",
+                          marginLeft: "22px",
+                          marginTop: "22px",
+                          textAlign: "center",
+                          borderTop: "10px solid rgb(28, 30, 59)"
+                        }}
+                      >
+                        Operation
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        width: "100%",
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
+                        marginTop: "75px",
+                        paddingBottom: "8px",
+                        height: "75px"
+                      }}
+                    >
+                      <Link
+                        to={path + "/use-cases/1"}
+                        style={{
+                          /* width: '320px', */ background: "#2cafea",
+                          boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
+                          borderRadius: "8px",
+                          padding: "12px",
+                          marginLeft: "22px",
+                          marginTop: "22px",
+                          textAlign: "center",
+                          height: "120px",
+                          color: "white",
+                          textAlign: "left"
+                        }}
+                      >
+                        <div style={{ fontWeight: 600, fontSize: "18px" }}>
+                          Beispielname{" "}
+                        </div>
+                        <div> Beispielbeschreibung </div>
+                        <br />
+                        Team
+                        <AvatarGroup
+                          appearance="stack"
+                          height={10}
+                          onAvatarClick={console.log}
+                          data={[
+                            { name: "Lars D", src: getAdorableAvatar("LarsD") },
+                            {
+                              name: "Konstantin R",
+                              src: getAdorableAvatar("KR")
+                            },
+                            { name: "noah s", src: getAdorableAvatar("NoahS") },
+                            { name: "Tim T", src: getAdorableAvatar("TT") },
+                            {
+                              name: "Max Mustermann",
+                              src: getAdorableAvatar("M")
+                            },
+                            { name: "John Doe" }
+                          ]}
+                          size="small"
+                        />
+                      </Link>
+
+                      <Link
+                        to={path + "/use-cases/1"}
+                        style={{
+                          /* width: '320px', */ background: "#fa4615",
+                          boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
+                          borderRadius: "8px",
+                          padding: "12px",
+                          marginLeft: "22px",
+                          marginTop: "22px",
+                          textAlign: "center",
+                          height: "120px",
+                          color: "white",
+                          textAlign: "left"
+                        }}
+                      >
+                        <div style={{ fontWeight: 600, fontSize: "18px" }}>
+                          Beispielname{" "}
+                        </div>
+                        <div> Beispielbeschreibung </div>
+                        <br />
+                        Team
+                        <AvatarGroup
+                          appearance="stack"
+                          height={10}
+                          onAvatarClick={console.log}
+                          data={[
+                            { name: "Lars D", src: getAdorableAvatar("LarsD") },
+                            {
+                              name: "Konstantin R",
+                              src: getAdorableAvatar("KR")
+                            },
+                            { name: "noah s", src: getAdorableAvatar("NoahS") },
+                            { name: "Tim T", src: getAdorableAvatar("TT") },
+                            {
+                              name: "Max Mustermann",
+                              src: getAdorableAvatar("M")
+                            },
+                            { name: "John Doe" }
+                          ]}
+                          size="small"
+                        />
+                      </Link>
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      width: "100%",
+                      background: "rgba(247, 247, 247, 0.12)",
+                      height: "100vh",
+                      marginLeft: "14px"
+                    }}
+                  >
+                    <div
+                      style={{
+                        paddingLeft: "12px",
+                        paddingTop: "12px",
+                        paddingBottom: "12px",
+                        fontWeight: 500,
+                        fontSize: "16px"
+                      }}
+                    >
+                      Legende
+                    </div>
+                    <div
+                      style={{
+                        paddingLeft: "12px",
+                        display: "flex",
+                        paddingBottom: "4px",
+                        paddingTop: "4px"
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          boxShadow: "rgba(157, 172, 202, 0.37) 0px 1px 4px",
+                          background: "rgb(250, 70, 21)",
+                          borderRadius: "4px"
+                        }}
+                      />
+                      <div style={{ lineHeight: "30px", paddingLeft: "12px" }}>
+                        {" "}
+                        Abteilung A{" "}
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        paddingLeft: "12px",
+                        display: "flex",
+                        paddingTop: "4px"
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          boxShadow: "rgba(157, 172, 202, 0.37) 0px 1px 4px",
+                          background: "rgb(44, 175, 234)",
+                          borderRadius: "4px"
+                        }}
+                      />
+                      <div style={{ lineHeight: "30px", paddingLeft: "12px" }}>
+                        {" "}
+                        Abteilung B{" "}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </Route>
             <Route path={`${path}/users`}>
