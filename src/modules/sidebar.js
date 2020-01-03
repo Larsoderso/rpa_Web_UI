@@ -99,32 +99,38 @@ function ProdIcon() {
 function BuildingBlockIcon() {
   return (
     <svg
-      width={20}
-      height={20}
-      viewBox="0 0 20 20"
+      width={32}
+      height={22}
+      viewBox="0 0 32 22"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <rect
-        y={10}
-        width={10}
-        height={10}
-        fill="white"
-        style={{ fill: "#42526d" }}
+        x={1}
+        y={1}
+        width="6.96008"
+        height="19.7602"
+        rx={1}
+        stroke="#42526D"
+        strokeWidth={2}
       />
       <rect
-        x={10}
-        y={10}
-        width={10}
-        height={10}
-        fill="white"
-        style={{ fill: "#42526d", y: 7, height: 16 }}
+        x="12.5208"
+        y={1}
+        width="6.96008"
+        height="19.7602"
+        rx={1}
+        stroke="#42526D"
+        strokeWidth={2}
       />
       <rect
-        width={10}
-        height={10}
-        fill="white"
-        style={{ fill: "#42526d", height: 7, y: 4 }}
+        x="24.04"
+        y={1}
+        width="6.96008"
+        height="19.7602"
+        rx={1}
+        stroke="#42526D"
+        strokeWidth={2}
       />
     </svg>
   );
@@ -382,12 +388,6 @@ function SideBar() {
               )
           },
           {
-            icon: () => <AddIcon />,
-            id: "logo",
-            tooltip: "New Use Cases",
-            onClick: () => seAddDrawerState(true)
-          },
-          {
             icon: () => <BuildingBlockIcon />,
             id: "logo",
             tooltip: "Use Cases",
@@ -395,23 +395,16 @@ function SideBar() {
               setredir(
                 <Redirect
                   to={{
-                    pathname: "/ui/use-cases"
+                    pathname: "/ui//"
                   }}
                 />
               )
           },
           {
-            icon: () => <RecurringJobs />,
+            icon: () => <AddIcon />,
             id: "logo",
-            tooltip: "Module",
-            onClick: () =>
-              setredir(
-                <Redirect
-                  to={{
-                    pathname: "/ui/projects"
-                  }}
-                />
-              )
+            tooltip: "New Use Cases",
+            onClick: () => seAddDrawerState(true)
           }
         ]}
         secondaryItems={[
