@@ -40,8 +40,9 @@ function SignInPage() {
     };
 
     axios
-      .get(
-        `https://9001-f0b438fa-b62e-477b-a8bb-e37c54fcfe8a.ws-eu01.gitpod.io/`
+      .post(
+        `https://9001-f0b438fa-b62e-477b-a8bb-e37c54fcfe8a.ws-eu01.gitpod.io/signin`,
+        user
         // { user }
       )
       .then(res => {

@@ -99,32 +99,38 @@ function ProdIcon() {
 function BuildingBlockIcon() {
   return (
     <svg
-      width={20}
-      height={20}
-      viewBox="0 0 20 20"
+      width={32}
+      height={22}
+      viewBox="0 0 32 22"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <rect
-        y={10}
-        width={10}
-        height={10}
-        fill="white"
-        style={{ fill: "#42526d" }}
+        x={1}
+        y={1}
+        width="6.96008"
+        height="19.7602"
+        rx={1}
+        stroke="#42526D"
+        strokeWidth={2}
       />
       <rect
-        x={10}
-        y={10}
-        width={10}
-        height={10}
-        fill="white"
-        style={{ fill: "#42526d", y: 7, height: 16 }}
+        x="12.5208"
+        y={1}
+        width="6.96008"
+        height="19.7602"
+        rx={1}
+        stroke="#42526D"
+        strokeWidth={2}
       />
       <rect
-        width={10}
-        height={10}
-        fill="white"
-        style={{ fill: "#42526d", height: 7, y: 4 }}
+        x="24.04"
+        y={1}
+        width="6.96008"
+        height="19.7602"
+        rx={1}
+        stroke="#42526D"
+        strokeWidth={2}
       />
     </svg>
   );
@@ -151,22 +157,6 @@ function SideBar() {
   const [isDrawerOpen, setDraweropen] = useState(false);
   const [addDrawerState, seAddDrawerState] = useState(false);
 
-  const [newUserEmail, setnewUserMail] = useState("");
-  function openDrawer() {
-    setDraweropen(true);
-  }
-  function inviteNewUser() {
-    axios
-      .get(
-        `https://9001-f0b438fa-b62e-477b-a8bb-e37c54fcfe8a.ws-eu01.gitpod.io/invitation/` +
-          newUserEmail
-        // { user }
-      )
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-      });
-  }
   return (
     <ThemeProvider
       theme={theme => ({ ...theme, mode: customMode, context: "product" })}
@@ -178,24 +168,6 @@ function SideBar() {
         isOpen={isDrawerOpen}
         width="wide"
       >
-        <div style={{ display: "flex" }}>
-          <TextField
-            value={newUserEmail}
-            onChange={e => setnewUserMail(e.target.value)}
-            type="E-Mail"
-            placeholder="E-Mail"
-            autoComplete="off"
-          />
-          <Button
-            onClick={inviteNewUser}
-            style={{ marginLeft: "12px", marginRight: "12px" }}
-            type="submit"
-            appearance="primary"
-          >
-            Nutzer einladen
-          </Button>
-        </div>
-
         <div
           style={{
             display: "grid",
@@ -320,10 +292,19 @@ function SideBar() {
                 />
               </svg>
             </div>
-
-            <div>Create new Use Case</div>
+            <div
+              style={{
+                lineHeight: "95px",
+                paddingLeft: "22px",
+                textDecoration: "none",
+                color: "#4b5668",
+                fontWeight: 400,
+                fontSize: "16px"
+              }}
+            >
+              Create new Use Case
+            </div>{" "}
           </Link>
-
           <Link
             onClick={onClose}
             to={path + "/team/new"}
@@ -336,13 +317,15 @@ function SideBar() {
               paddingTop: "12px",
               paddingLeft: "12px",
               paddingBottom: "12px",
-              marginTop: "15px"
+              display: "flex",
+              flexDirection: "row",
+              marginTop: "20px"
             }}
           >
             <div
               style={{
                 width: "95px",
-                height: "100%",
+                height: "95px",
                 background: "#204B9D",
                 borderRadius: "50%"
               }}
@@ -374,7 +357,19 @@ function SideBar() {
                 />
               </svg>
             </div>
-          </Link>
+            <div
+              style={{
+                lineHeight: "95px",
+                paddingLeft: "22px",
+                textDecoration: "none",
+                color: "#4b5668",
+                fontWeight: 400,
+                fontSize: "16px"
+              }}
+            >
+              Create a new team
+            </div>{" "}
+          </Link>{" "}
         </div>
       </Drawer>
 
@@ -393,12 +388,6 @@ function SideBar() {
               )
           },
           {
-            icon: () => <AddIcon />,
-            id: "logo",
-            tooltip: "New Use Cases",
-            onClick: () => seAddDrawerState(true)
-          },
-          {
             icon: () => <BuildingBlockIcon />,
             id: "logo",
             tooltip: "Use Cases",
@@ -406,23 +395,16 @@ function SideBar() {
               setredir(
                 <Redirect
                   to={{
-                    pathname: "/ui/use-cases"
+                    pathname: "/ui/"
                   }}
                 />
               )
           },
           {
-            icon: () => <RecurringJobs />,
+            icon: () => <AddIcon />,
             id: "logo",
-            tooltip: "Module",
-            onClick: () =>
-              setredir(
-                <Redirect
-                  to={{
-                    pathname: "/ui/projects"
-                  }}
-                />
-              )
+            tooltip: "New Use Cases",
+            onClick: () => seAddDrawerState(true)
           }
         ]}
         secondaryItems={[
