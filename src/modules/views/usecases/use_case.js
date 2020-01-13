@@ -8,6 +8,7 @@ import {
   useRouteMatch,
   Redirect
 } from "react-router-dom";
+import Select from "@atlaskit/select";
 
 import Button, { ButtonGroup } from "@atlaskit/button";
 import TextField from "@atlaskit/textfield";
@@ -50,6 +51,8 @@ import {
   YAxis,
   VerticalGridLines,
   HorizontalGridLines,
+  ChartLabel,
+  LabelSeries,
   MarkSeries
 } from "react-vis";
 import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
@@ -101,6 +104,7 @@ function SingleUseCase(props) {
   const [comments, setComments] = useState([
     { Author: "user@rpa.rocks", text: "tesckoooomentar" }
   ]);
+  const [teams, updateTeams] = useState([{}]);
 
   const [commentBox, setCommentbox] = useState("");
   useEffect(() => setJWT(parseJwt(localStorage.getItem("knock"))), []);
@@ -275,54 +279,65 @@ function SingleUseCase(props) {
               Excel Data Import{" "}
             </PageHeader>
           </div>
-          <div style={{ padding: "12px" }}>
-            <DropdownMenu
-              trigger="status"
-              triggerType="button"
-              onItemActivated={item => {
-                // you can do allthethings here!
-                console.log(item);
-              }}
-            >
-              <DropdownItemRadio
-                onClick={item => {
-                  // you can do allthethings here!
-                  console.log(item);
-                }}
-                Icon
-                id="Idwa"
-              >
-                Idea
-              </DropdownItemRadio>
-              <DropdownItemRadio id="austin">Concept</DropdownItemRadio>
-              <DropdownItemRadio id="Development">
-                Development
-              </DropdownItemRadio>
-
-              <DropdownItemRadio id="austin">Testing</DropdownItemRadio>
-              <DropdownItemRadio id="austin">Operation</DropdownItemRadio>
-            </DropdownMenu>
+          <div style={{ padding: "12px", width: "200px" }}>
+            <Select
+              style={{ maxWidth: "200px" }}
+              defaultValue={{ label: "User", value: "User" }}
+              options={[
+                { label: "User", value: "User" },
+                { label: "Admin", value: "Admin" }
+              ]}
+              value="User"
+            />
           </div>
 
-          <div style={{ paddingLeft: "12px" }}>
-            <div style={{ fontSize: "20px", color: "#42526d" }}>Evaluation</div>
-
+          <div style={{ paddingLeft: "12px", paddingTop: "22px" }}>
             <FlexibleWidthXYPlot height={300}>
               <VerticalGridLines />
               <HorizontalGridLines />
-              <XAxis />
-              <YAxis />
+              <ChartLabel
+                text="hoch"
+                className="alt-x-label"
+                includeMargin={false}
+                xPercent={0.9}
+                yPercent={0.95}
+              />
+              <ChartLabel
+                text="hoch"
+                className="alt-y-label"
+                includeMargin={false}
+                xPercent={0.005}
+                yPercent={0.1}
+              />
+              <XAxis title="Komplexität" position="middle" />
+              <YAxis title="Nutzen" position="middle" />
               <MarkSeries
                 className="mark-series-example"
                 strokeWidth={2}
                 opacity="0.8"
                 sizeRange={[5, 15]}
+                color="#172B4D"
+                fill="#172B4D"
                 data={[
-                  { x: -1, y: 10, size: 30 },
-                  { x: 1.7, y: 12, size: 10 },
-                  { x: 2, y: 5, size: 1 },
-                  { x: 3, y: 15, size: 12 },
-                  { x: 2.5, y: 7, size: 4 }
+                  {
+                    x: -1,
+                    y: 10,
+                    size: 30
+                  },
+                  { x: 1.7, y: 12, size: 10, fill: "#FFAB00" },
+                  { x: 2, y: 5, size: 1, fill: "#FFAB00" },
+                  { x: 3, y: 15, size: 12, fill: "#FFAB00" },
+                  { x: 2.5, y: 7, size: 4, fill: "#FFAB00" }
+                ]}
+              />
+              <LabelSeries
+                allowOffsetToBeReversed
+                data={[
+                  { x: -1, y: 10, size: 30, label: "UC1", xOffset: 35 },
+                  { x: 1.7, y: 12, size: 10, label: "UC1", xOffset: 25 },
+                  { x: 2, y: 5, size: 1, fill: "#FFAB00" },
+                  { x: 3, y: 15, size: 12, fill: "#FFAB00" },
+                  { x: 2.5, y: 7, size: 4, fill: "#FFAB00" }
                 ]}
               />
             </FlexibleWidthXYPlot>

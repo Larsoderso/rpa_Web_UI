@@ -30,6 +30,27 @@ function Kanban() {
 
   const [red, setredir] = useState(<div />);
   const [board, setboard] = useState([]);
+  const [teamListing, setTeamListing] = useState([]);
+  const [comments, setComments] = useState([
+    { Author: "user@rpa.rocks", text: "tesckoooomentar" }
+  ]);
+
+  useEffect(() => getTeams(), []);
+
+  function getTeams() {
+    console.log("--- Load teams----");
+    axios
+      .get(
+        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/teams`
+        // { user }
+      )
+      .then(res => {
+        console.log(res.data);
+        setTeamListing(res.data);
+
+        console.log("teams----", teamListing);
+      });
+  }
 
   function getBoard() {
     console.log("--- Load Board----");
@@ -119,7 +140,7 @@ function Kanban() {
   const renderCard = row => (
     <div
       style={{
-        /* width: '320px', */ background: "#2cafea",
+        /* width: '320px', */ background: row.Color,
         boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
         borderRadius: "8px",
         padding: "12px",
@@ -170,7 +191,6 @@ function Kanban() {
     },
     columnStyle: {
       border: "none",
-      padding: 10,
       borderRadius: 2,
       paddingBottom: 0,
       userSelect: "none",
@@ -178,17 +198,18 @@ function Kanban() {
       borderRadius: "8px",
       borderTopRightRadius: "0px",
       borderTopLeftRadius: "0px",
-      minHeight: "90vh"
+      minHeight: "90vh",
+      maxWidth: "240px"
     },
     columnHeaderStyle: {
       background: "rgb(255, 255, 255)",
       boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
       borderRadius: "8px",
       padding: "2px",
-      marginTop: "22px",
       textAlign: "center",
       borderTop: "10px solid rgb(96, 125, 139)",
-      marginBottom: "8px"
+      marginBottom: "8px",
+      maxWidth: "240px"
     },
     columnTitleStyle: {
       fontWeight: 600,
@@ -199,25 +220,37 @@ function Kanban() {
   };
 
   return (
-    <div>
+    <div style={{ overflowX: "hidden" }}>
       {red}
 
       <div
         style={{
           width: "100%",
-          height: "20px",
+          height: "90px",
+          background: "#587887",
           flexShrink: 0,
           padding: "12px",
           overflow: "hidden"
         }}
       >
-        <UsecaseViewSwitcher />
+        <div
+          style={{
+            color: "white",
+            lineHeight: "80px",
+            fontWeight: 400,
+            fontSize: "34px"
+          }}
+        >
+          {" "}
+          Use cases{" "}
+        </div>
       </div>
+
       <div
         style={{
           width: "100%",
           display: "grid",
-          gridTemplateColumns: "7fr 2fr",
+          gridTemplateColumns: "1fr",
           marginTop: "15px",
           paddingBottom: "8px",
           height: "100%"
@@ -261,48 +294,38 @@ function Kanban() {
           >
             Legende
           </div>
+
           <div
             style={{
-              paddingLeft: "12px",
-              display: "flex",
-              paddingBottom: "4px",
-              paddingTop: "4px"
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr "
             }}
           >
-            <div
-              style={{
-                width: "30px",
-                height: "30px",
-                boxShadow: "rgba(157, 172, 202, 0.37) 0px 1px 4px",
-                background: "rgb(250, 70, 21)",
-                borderRadius: "4px"
-              }}
-            />
-            <div style={{ lineHeight: "30px", paddingLeft: "12px" }}>
-              {" "}
-              Abteilung A{" "}
-            </div>
-          </div>
-          <div
-            style={{
-              paddingLeft: "12px",
-              display: "flex",
-              paddingTop: "4px"
-            }}
-          >
-            <div
-              style={{
-                width: "30px",
-                height: "30px",
-                boxShadow: "rgba(157, 172, 202, 0.37) 0px 1px 4px",
-                background: "rgb(44, 175, 234)",
-                borderRadius: "4px"
-              }}
-            />
-            <div style={{ lineHeight: "30px", paddingLeft: "12px" }}>
-              {" "}
-              Abteilung B{" "}
-            </div>
+            {teamListing.map(function(object, i) {
+              return (
+                <div
+                  style={{
+                    paddingLeft: "12px",
+                    display: "flex",
+                    paddingBottom: "4px",
+                    paddingTop: "4px"
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      boxShadow: "rgba(157, 172, 202, 0.37) 0px 1px 4px",
+                      background: object.Color,
+                      borderRadius: "4px"
+                    }}
+                  />
+                  <div style={{ lineHeight: "30px", paddingLeft: "12px" }}>
+                    {object.Name}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

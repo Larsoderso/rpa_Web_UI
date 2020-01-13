@@ -40,16 +40,6 @@ const breadcrumbs = (
     <BreadcrumbsItem text="New use case" key="Parent page" />
   </BreadcrumbsStateless>
 );
-const CustomTitleComponent = () => {
-  return (
-    <InlineEdit
-      readView={() => <ReadView>Teamname</ReadView>}
-      editView={(props, ref) => <EditView {...props} innerRef={ref} />}
-      defaultValue="Teamname"
-      onConfirm={() => {}}
-    />
-  );
-};
 
 const ReadView = styled.div`
   font-size: 24px;
@@ -91,16 +81,21 @@ function NewTeam() {
         content: "E-Mail",
         shouldTruncate: true,
         isSortable: true
-      },
-      {
-        key: "term",
-        content: "Rolle",
-        shouldTruncate: true,
-        isSortable: true
       }
     ]
   };
-
+  const CustomTitleComponent = () => {
+    return (
+      <InlineEdit
+        readView={() => <ReadView>{name}</ReadView>}
+        editView={(props, ref) => <EditView {...props} innerRef={ref} />}
+        defaultValue="Name the use case"
+        onConfirm={(value, analyticsEvent) => {
+          setname(value);
+        }}
+      />
+    );
+  };
   const isLoading = false;
   function createKey(input) {
     return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
@@ -125,6 +120,7 @@ function NewTeam() {
   const [anmloading, setanmloading] = useState(false);
   const [email, setemail] = useState("");
   const [pword, setpword] = useState("");
+  const [name, setname] = useState("Name the use case");
 
   const [newUserEmail, setnewUserMail] = useState("");
 
@@ -154,9 +150,6 @@ function NewTeam() {
 
       {
         content: <div>{mem.email}</div>
-      },
-      {
-        content: <div>A</div>
       }
     ]
   }));
@@ -167,28 +160,17 @@ function NewTeam() {
     setanmloading(true);
 
     console.log("memberlist", memberList);
-
-    axios
-      .get(
-        `https://9001-f0b438fa-b62e-477b-a8bb-e37c54fcfe8a.ws-eu01.gitpod.io/invitation/` +
-          newUserEmail
-        // { user }
-      )
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-      });
   }
 
   function postNewTeam() {
     const data = {
-      name: "test",
+      name: name,
       description: description,
       members: memberList
     };
     axios
       .post(
-        `https://jsonplaceholder.typicode.com/posts`,
+        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/teams`,
         data
         // { user }
       )

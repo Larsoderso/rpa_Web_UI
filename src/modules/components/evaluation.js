@@ -10,8 +10,6 @@ import { isPopupUserPickerByProps } from "@atlaskit/user-picker/dist/cjs/compone
 import { defaultProps } from "react-select/async";
 
 function EvaluationItem(props) {
-  const [rangeTest, setRangeTest] = useState(3);
-
   return (
     <div
       style={{
@@ -26,10 +24,9 @@ function EvaluationItem(props) {
         min={props.bottom}
         max={props.top}
         step={1}
-        value={rangeTest}
-        onChange={e => setRangeTest(e)}
+        value={props.value}
+        onChange={value => props.onChange(value)}
       />
-      {rangeTest}
     </div>
   );
 }

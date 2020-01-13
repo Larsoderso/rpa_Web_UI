@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useState } from "react";
+import React, { Component, Fragment, useState, useEffect } from "react";
 import styled from "styled-components";
 
 import {
@@ -89,7 +89,11 @@ function NewUseCase() {
   const [anmloading, setanmloading] = useState(false);
   const [name, setname] = useState("Name the use case");
   const [description, setdescription] = useState("");
-  const [team, setteam] = useState("");
+  const [selected_teams, setteam] = useState([]);
+  const [teams, setTeamListing] = useState([{}]);
+  const [frequency, setfrequency] = useState(3);
+
+  useEffect(() => getTeams(), []);
 
   const actionsContent = (
     <ButtonGroup>
@@ -104,13 +108,35 @@ function NewUseCase() {
     </ButtonGroup>
   );
 
+  function getTeams() {
+    console.log("--- Load teams----");
+    axios
+      .get(
+        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/teams`
+        // { user }
+      )
+      .then(res => {
+        console.log(res.data);
+        var conv = [];
+        for (var i = 0; i < res.data.length; i++) {
+          conv.push({ id: res.data[i].ID, name: res.data[i].Name });
+        }
+
+        setTeamListing(conv);
+        console.log("teams----", teams);
+      });
+  }
+
   function CreateUseCase() {
     setanmloading(true);
 
     const data = {
       name: name,
       description: description,
-      team: team
+      teams: selected_teams,
+      evaluations: {
+        frequency: frequency
+      }
     };
 
     axios
@@ -165,19 +191,28 @@ function NewUseCase() {
         <br />
         <UserPicker
           placeholder="Enter Team"
-          value={team}
+          value={selected_teams}
           fieldId="example"
-          options={[{ name: "Team A", value: "TEAM A" }]}
+          options={teams}
           onChange={(value, action) => {
             setteam(value);
           }}
           onInputChange={onInputChange}
+          isMulti
         />
         <br />
         <br />
-        <EvaluationItem question="Question 1" bottom={1} top={10} />
-        <EvaluationItem question="Question 2" bottom={1} top={10} />
-        <EvaluationItem question="Question 3" bottom={1} top={10} />
+        <EvaluationItem
+          question="Frequenz"
+          onChange={e => setfrequency(e)}
+          bottom={1}
+          top={5}
+        />
+        <EvaluationItem question="Duration" bottom={1} top={5} />
+        <EvaluationItem question="FTE" bottom={1} top={5} />
+        <EvaluationItem question="Quality" bottom={1} top={5} />
+        <EvaluationItem question="Functional complexity" bottom={1} top={5} />
+        <EvaluationItem question="Technical complexity" bottom={1} top={5} />
         <br />
       </div>
     </div>
