@@ -22,6 +22,7 @@ import Form, {
 import { Checkbox } from "@atlaskit/checkbox";
 import PublicHeader from "./../navigation/header_outside";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 
 function SignInPage() {
   // Send Login Credentials to Server
@@ -30,18 +31,34 @@ function SignInPage() {
   const [anmloading, setanmloading] = useState(false);
   const [email, setemail] = useState("");
   const [pword, setpword] = useState("");
+  const [red, setredir] = useState(<div />);
+
+  function parseJwt(token) {
+    var base64Url = token.split(".")[1];
+    var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    var jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function(c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+
+    return JSON.parse(jsonPayload);
+  }
 
   function SendLoginCredentials() {
     setanmloading(true);
 
     const user = {
-      mail: email,
+      email: email,
       password: pword
     };
 
     axios
       .post(
-        `https://9001-f0b438fa-b62e-477b-a8bb-e37c54fcfe8a.ws-eu01.gitpod.io/signin`,
+        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/signin`,
         user
         // { user }
       )
@@ -49,6 +66,20 @@ function SignInPage() {
         setanmloading(false);
         console.log(res);
         console.log(res.data);
+
+        if (res.data.Error == false) {
+          var decoded = parseJwt(res.data.Jsontoken);
+          localStorage.setItem("knock", res.data.Jsontoken);
+
+          setredir(
+            <Redirect
+              to={{
+                pathname: "/ui/"
+              }}
+            />
+          );
+          console.log(decoded);
+        }
       });
   }
 
@@ -56,6 +87,7 @@ function SignInPage() {
     <div style={{ display: "flex", height: "100vh" }}>
       <div>
         <PublicHeader />
+        {red}
         <svg
           width={1600}
           height={618}

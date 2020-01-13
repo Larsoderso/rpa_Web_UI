@@ -15,9 +15,13 @@ function MyDropzone() {
     const data = new FormData();
     data.append("file", acceptedFiles[0]);
 
-    axios.post("http://3.120.144.200:8080/upload", data, {
-      // receive two    parameter endpoint url ,form data
-    });
+    axios.post(
+      "https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/uc/1/files",
+      data,
+      {
+        // receive two    parameter endpoint url ,form data
+      }
+    );
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 

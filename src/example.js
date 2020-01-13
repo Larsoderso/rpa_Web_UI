@@ -78,6 +78,8 @@ import NewTeam from "./modules/views/user_mgmt/newTeam";
 import ListUseCases from "./modules/views/usecases/list";
 import SingleUseCase from "./modules/views/usecases/use_case";
 import KanbanBoard from "./modules/views/overview/kanban";
+import { PrivateRoute } from "./modules/views/auth/privateroute";
+import Kanban from "./modules/views/overview/kanban";
 function getAdorableAvatar(id: string, size: number = 80) {
   return `https://api.adorable.io/avatars/${size}/${id}.png`;
 }
@@ -533,6 +535,7 @@ function UI() {
       <ThemeProvider
         theme={theme => ({ ...theme, mode: customMode, context: "product" })}
       >
+        {red}
         <SideBar />
         <div
           style={{
@@ -545,7 +548,7 @@ function UI() {
         >
           {red}
           <Switch>
-            <Route exact path={`${path}/`}>
+            <PrivateRoute exact path={`${path}/old`}>
               <div
                 style={{
                   display: "flex",
@@ -820,7 +823,15 @@ function UI() {
                   </div>
                 </div>
               </div>
-            </Route>
+            </PrivateRoute>
+
+            <PrivateRoute
+              exact
+              exact
+              path={`${path}/`}
+              component={() => <Kanban />}
+            />
+
             <Route path={`${path}/users`}>
               <div>Users</div>
             </Route>
@@ -837,9 +848,11 @@ function UI() {
             <Route exact path={`${path}/use-cases/`}>
               <ListUseCases />{" "}
             </Route>
-            <Route exact path={`${path}/use-cases/:id`}>
-              <SingleUseCase />{" "}
-            </Route>
+            <PrivateRoute
+              exact
+              path={`${path}/use-cases/:id`}
+              component={() => <SingleUseCase />}
+            />
             <Route exact path={`${path}/usermanagement`}>
               <UserMgmt />
             </Route>
@@ -879,9 +892,9 @@ function App() {
           <Route path="/auth/reset">
             <InvitationPage />
           </Route>
-          <Route path="/ui">
+          <PrivateRoute path="/ui">
             <UI />{" "}
-          </Route>
+          </PrivateRoute>
         </Switch>
       </Router>
     </div>

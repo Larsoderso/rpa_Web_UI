@@ -161,8 +161,9 @@ function NewTeam() {
     ]
   }));
   function inviteNewUser() {
-    memberList.push({ email: email });
-    updateMemberList(memberList);
+    var m = memberList;
+    m.push({ email: newUserEmail });
+    updateMemberList(m);
     setanmloading(true);
 
     console.log("memberlist", memberList);
@@ -250,7 +251,7 @@ function NewTeam() {
           <Button
             onClick={inviteNewUser}
             style={{ marginLeft: "12px", marginRight: "12px" }}
-            type="submit"
+            type="button "
             appearance="primary"
           >
             Add User

@@ -137,7 +137,8 @@ function UsecaseViewSwitcher() {
         width: "150px",
         height: "20px",
         display: "flex",
-        padding: "12px"
+        padding: "12px",
+        marginBottom: "8px"
       }}
     >
       <svg
