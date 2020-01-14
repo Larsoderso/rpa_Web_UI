@@ -96,6 +96,36 @@ function ProdIconOld() {
     </svg>
   );
 }
+
+function ConsoleIcon() {
+  return (
+    <svg
+      width={65}
+      height={54}
+      viewBox="0 0 65 54"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ width: "30px", height: "22px" }}
+    >
+      <rect
+        x="2.5"
+        y="2.5"
+        width={60}
+        height={49}
+        rx="5.5"
+        stroke="#42526D"
+        strokeWidth={5}
+      />
+      <rect x={32} y={36} width={23} height={6} rx={3} fill="#485969" />
+      <path
+        d="M14 14.5L24.5828 24.6418C25.3697 25.396 25.4079 26.6414 24.6686 27.4424L14 39"
+        stroke="#42526D"
+        strokeWidth={6}
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
 function ProdIcon() {
   return (
     <svg
@@ -500,6 +530,11 @@ function SideBar() {
               id: "logo",
               tooltip: "User Management",
               onClick: () => setDraweropen(true)
+            },
+            {
+              icon: () => <ConsoleIcon />,
+              id: "logo",
+              tooltip: "Admin"
             },
             {
               icon: () => <SignOutIcon />,

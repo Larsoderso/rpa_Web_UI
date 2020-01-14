@@ -125,7 +125,7 @@ function NewTeam() {
   const [newUserEmail, setnewUserMail] = useState("");
 
   const [description, setDescription] = useState("");
-  const [memberList, updateMemberList] = useState([{ email: "test" }]);
+  const [memberList, updateMemberList] = useState([]);
 
   const actionsContent = (
     <ButtonGroup>

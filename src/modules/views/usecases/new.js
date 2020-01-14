@@ -92,6 +92,11 @@ function NewUseCase() {
   const [selected_teams, setteam] = useState([]);
   const [teams, setTeamListing] = useState([{}]);
   const [frequency, setfrequency] = useState(3);
+  const [duration, setDuration] = useState(3);
+  const [fte, setFTE] = useState(3);
+  const [quality, setQuality] = useState(3);
+  const [func, setFunc] = useState(3);
+  const [tech, setTech] = useState(3);
 
   useEffect(() => getTeams(), []);
 
@@ -135,13 +140,18 @@ function NewUseCase() {
       description: description,
       teams: selected_teams,
       evaluations: {
-        frequency: frequency
+        frequency: frequency,
+        duration: duration,
+        fte: fte,
+        quality: quality,
+        functionalcom: func,
+        technicalcom: tech
       }
     };
 
     axios
       .post(
-        `https://jsonplaceholder.typicode.com/posts`,
+        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/uc/`,
         data
         // { user }
       )
@@ -204,15 +214,46 @@ function NewUseCase() {
         <br />
         <EvaluationItem
           question="Frequenz"
+          value={frequency}
           onChange={e => setfrequency(e)}
           bottom={1}
           top={5}
         />
-        <EvaluationItem question="Duration" bottom={1} top={5} />
-        <EvaluationItem question="FTE" bottom={1} top={5} />
-        <EvaluationItem question="Quality" bottom={1} top={5} />
-        <EvaluationItem question="Functional complexity" bottom={1} top={5} />
-        <EvaluationItem question="Technical complexity" bottom={1} top={5} />
+        <EvaluationItem
+          question="Duration"
+          value={duration}
+          onChange={e => setDuration(e)}
+          bottom={1}
+          top={5}
+        />
+        <EvaluationItem
+          question="FTE"
+          value={fte}
+          onChange={e => setFTE(e)}
+          bottom={1}
+          top={5}
+        />
+        <EvaluationItem
+          question="Quality"
+          value={quality}
+          onChange={e => setQuality(e)}
+          bottom={1}
+          top={5}
+        />
+        <EvaluationItem
+          question="Functional complexity"
+          value={func}
+          onChange={e => setFunc(e)}
+          bottom={1}
+          top={5}
+        />
+        <EvaluationItem
+          value={tech}
+          onChange={e => setTech(e)}
+          question="Technical complexity"
+          bottom={1}
+          top={5}
+        />
         <br />
       </div>
     </div>

@@ -59,13 +59,6 @@ import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
 import UserPicker from "@atlaskit/user-picker";
 import EvaluationItem from "../../components/evaluation";
 
-const breadcrumbs = (
-  <BreadcrumbsStateless onExpand={() => {}}>
-    <BreadcrumbsItem text="Use Cases" key="Some project" />
-    <BreadcrumbsItem text="Excel Data Import" key="Parent page" />
-  </BreadcrumbsStateless>
-);
-
 function getAdorableAvatar(id: string, size: number = 80) {
   return `https://api.adorable.io/avatars/${size}/${id}.png`;
 }
@@ -92,13 +85,15 @@ function SingleUseCase(props) {
   const [email, setemail] = useState("");
   const [pword, setpword] = useState("");
 
-  const [status, setStatus] = useState("Idea");
+  const [status, setStatus] = useState(1);
 
   const [deleteModal, setDeleteModal] = useState(false);
   const [updateModal, setupdateModal] = useState(false);
   const [name, setname] = useState("Name the use case");
   const [description, setdescription] = useState("");
   const [team, setteam] = useState("");
+
+  const [Uc, setUc] = useState({});
 
   const [parsedJWT, setJWT] = useState(false);
   const [comments, setComments] = useState([
@@ -107,21 +102,22 @@ function SingleUseCase(props) {
   const [teams, updateTeams] = useState([{}]);
 
   const [commentBox, setCommentbox] = useState("");
-  useEffect(() => setJWT(parseJwt(localStorage.getItem("knock"))), []);
-  useEffect(() => getComments(), []);
 
-  const actions = [
-    {
-      text: "Cancel",
-      appearance: "default",
-      onClick: () => setDeleteModal(false)
-    },
-    {
-      text: "Delete Use Case",
-      appearance: "danger",
-      onClick: () => console.log("hey")
-    }
+  //update dialog
+
+  const StatusArray = [
+    "Idea",
+    "Concept",
+    "Devleopment",
+    "Testing",
+    "Operation"
   ];
+
+  useEffect(() => getUseCase(props), []);
+
+  useEffect(() => setJWT(parseJwt(localStorage.getItem("knock"))), []);
+  useEffect(() => getComments(props), []);
+  useEffect(() => console.log(props), []);
 
   const actions_update = [
     {
@@ -136,25 +132,13 @@ function SingleUseCase(props) {
     }
   ];
 
-  const actionsContent = (
-    <ButtonGroup>
-      <Button onClick={() => setupdateModal(true)} appearance="primary">
-        Update
-      </Button>{" "}
-      {parsedJWT.role == "admin" && (
-        <Button onClick={() => setDeleteModal(true)} appearance="danger">
-          Delete
-        </Button>
-      )}
-      <Button>...</Button>
-    </ButtonGroup>
-  );
-
   function getComments() {
     console.log("--- Load comments----");
     axios
       .get(
-        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/uc/1/comments`
+        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/uc/` +
+          props.props.match.params.id +
+          `/comments`
         // { user }
       )
       .then(res => {
@@ -164,12 +148,44 @@ function SingleUseCase(props) {
         setComments(res.data);
       });
   }
+  function getUseCase() {
+    console.log("--- Load comments----");
+    axios
+      .get(
+        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/uc/` +
+          props.props.match.params.id +
+          `/`
+        // { user }
+      )
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+
+        setUc(res.data);
+
+        setStatus(res.data.Status);
+      });
+  }
+  function dropUseCase() {
+    console.log("--- Load comments----");
+    axios
+      .delete(
+        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/uc/` +
+          props.props.match.params.id +
+          `/`
+        // { user }
+      )
+      .then(res => {
+        console.log(res);
+        console.log("deleted");
+      });
+  }
 
   function newComment() {
     const d = {
       text: commentBox,
       author: 1,
-      usecase: 1
+      usecase: props.props.match.params.id
     };
     axios
       .post(
@@ -183,16 +199,51 @@ function SingleUseCase(props) {
         getComments();
       });
   }
+  const actionsContent = (
+    <ButtonGroup>
+      <Button onClick={() => setupdateModal(true)} appearance="primary">
+        Update
+      </Button>{" "}
+      {parsedJWT.role == "admin" && (
+        <Button onClick={() => setDeleteModal(true)} appearance="danger">
+          Delete
+        </Button>
+      )}
+      <Button>...</Button>
+    </ButtonGroup>
+  );
+  const actions = [
+    {
+      text: "Cancel",
+      appearance: "default",
+      onClick: () => setDeleteModal(false)
+    },
+    {
+      text: "Delete Use Case",
+      appearance: "danger",
+      onClick: () => dropUseCase()
+    }
+  ];
+
+  const breadcrumbs = (
+    <BreadcrumbsStateless onExpand={() => {}}>
+      <BreadcrumbsItem text="Use Cases" key="Some project" />
+      <BreadcrumbsItem text={Uc.Name} key="Parent page" />
+    </BreadcrumbsStateless>
+  );
+
   function changeStatus(val) {
     setStatus(val);
-    const d = {
-      status: status
-    };
     axios
       .put(
-        `https://jsonplaceholder.typicode.com/posts/1`,
-        status
-        // { user }
+        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/uc/` +
+          props.props.match.params.id +
+          `
+/status`,
+        {
+          Uc: parseInt(props.props.match.params.id),
+          status: val
+        }
       )
       .then(res => {
         console.log(res);
@@ -276,18 +327,21 @@ function SingleUseCase(props) {
         <div>
           <div style={{ paddingLeft: "12px" }}>
             <PageHeader breadcrumbs={breadcrumbs} actions={actionsContent}>
-              Excel Data Import{" "}
+              {Uc.Name}
             </PageHeader>
           </div>
           <div style={{ padding: "12px", width: "200px" }}>
             <Select
               style={{ maxWidth: "200px" }}
-              defaultValue={{ label: "User", value: "User" }}
+              value={{ label: StatusArray[status - 1], value: status }}
               options={[
-                { label: "User", value: "User" },
-                { label: "Admin", value: "Admin" }
+                { label: "Idea", value: 1 },
+                { label: "Concept", value: 2 },
+                { label: "Development", value: 3 },
+                { label: "Testing", value: 4 },
+                { label: "Operation", value: 5 }
               ]}
-              value="User"
+              onChange={value => changeStatus(value.value)}
             />
           </div>
 

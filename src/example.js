@@ -851,7 +851,7 @@ function UI() {
             <PrivateRoute
               exact
               path={`${path}/use-cases/:id`}
-              component={() => <SingleUseCase />}
+              component={props => <SingleUseCase props={props} />}
             />
             <Route exact path={`${path}/usermanagement`}>
               <UserMgmt />
@@ -886,7 +886,7 @@ function App() {
             <div>Users</div>
           </Route>
 
-          <Route path="/invitation/:inv">
+          <Route path="/signout">
             <InvitationPage />
           </Route>
           <Route path="/auth/reset">

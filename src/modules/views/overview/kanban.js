@@ -20,6 +20,7 @@ import {
   Redirect
 } from "react-router-dom";
 import axios from "axios";
+import Tabs from "@atlaskit/tabs";
 
 function getAdorableAvatar(id: string, size: number = 80) {
   return `https://api.adorable.io/avatars/${size}/${id}.png`;
@@ -34,6 +35,132 @@ function Kanban() {
   const [comments, setComments] = useState([
     { Author: "user@rpa.rocks", text: "tesckoooomentar" }
   ]);
+  const renderCard = row => (
+    <div
+      style={{
+        /* width: '320px', */ background: row.Color,
+        boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
+        borderRadius: "8px",
+        padding: "12px",
+        textAlign: "center",
+        height: "120px",
+        color: "white",
+        textAlign: "left",
+        transition: "1s linear"
+      }}
+      onClick={() =>
+        setredir(
+          <Redirect
+            to={{
+              pathname: "/ui/use-cases/" + getrealID(row.id)
+            }}
+          />
+        )
+      }
+    >
+      <div style={{ fontWeight: 600, fontSize: "18px" }}>{row.Name}</div>
+      <br />
+      Team
+      <AvatarGroup
+        appearance="stack"
+        onAvatarClick={console.log}
+        height={10}
+        data={row.Team.map(function(i, el) {
+          return { name: "Lars D", src: getAdorableAvatar("LarsD") };
+        })}
+        size="small"
+      />
+    </div>
+  );
+  const styles = {
+    cardWrapper: {
+      borderRadius: 2,
+      border: "1px solid rgba(96,115,137,0.12)",
+      backgroundColor: "#ffffff",
+      boxShadow: "none",
+      padding: "9px 9px 0px 9px",
+      minHeight: 40,
+      marginBottom: 8
+    },
+    columnStyle: {
+      border: "none",
+      borderRadius: 2,
+      paddingBottom: 0,
+      userSelect: "none",
+      background: "rgb(255, 255, 255)",
+      borderRadius: "8px",
+      borderTopRightRadius: "0px",
+      borderTopLeftRadius: "0px",
+      minHeight: "90vh",
+      maxWidth: "240px"
+    },
+    columnHeaderStyle: {
+      background: "rgb(255, 255, 255)",
+      boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
+      borderRadius: "8px",
+      padding: "2px",
+      textAlign: "center",
+      borderTop: "10px solid rgb(96, 125, 139)",
+      marginBottom: "8px",
+      maxWidth: "240px"
+    },
+    columnTitleStyle: {
+      fontWeight: 600,
+      fontSize: 14,
+      color: "#607389",
+      marginRight: 5
+    }
+  };
+
+  const tabs = [
+    {
+      label: "Kanban",
+      content: (
+        <div style={{ height: "100vh", width: "100%" }}>
+          <div
+            style={{
+              width: "100%",
+              height: "90px",
+              background: "#587887",
+              flexShrink: 0,
+              padding: "12px",
+              overflow: "hidden"
+            }}
+          >
+            <div
+              style={{
+                color: "white",
+                lineHeight: "80px",
+                fontWeight: 400,
+                fontSize: "34px"
+              }}
+            >
+              {" "}
+              Use cases{" "}
+            </div>
+          </div>
+          {board.length != 0 && (
+            <ReactKanban
+              style={{
+                height: "80vh",
+                minWidth: "50vw",
+                width: "55vw",
+                maxWidth: "60vw"
+              }}
+              columns={board}
+              renderCard={renderCard}
+              columnStyle={styles.columnStyle}
+              columnHeaderStyle={styles.columnHeaderStyle}
+              onDragEnd={info => {
+                cardChange(info);
+              }}
+            />
+          )}
+        </div>
+      )
+    },
+    { label: "Matrix", content: <div>Two</div> }
+  ];
 
   useEffect(() => getTeams(), []);
 
@@ -137,114 +264,18 @@ function Kanban() {
     }
   }
 
-  const renderCard = row => (
-    <div
-      style={{
-        /* width: '320px', */ background: row.Color,
-        boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
-        borderRadius: "8px",
-        padding: "12px",
-        textAlign: "center",
-        height: "120px",
-        color: "white",
-        textAlign: "left",
-        transition: "1s linear"
-      }}
-      onClick={() =>
-        setredir(
-          <Redirect
-            to={{
-              pathname: "/ui/use-cases/" + row.id
-            }}
-          />
-        )
-      }
-    >
-      <div style={{ fontWeight: 600, fontSize: "18px" }}>{row.Name}</div>
-      <br />
-      Team
-      <AvatarGroup
-        appearance="stack"
-        onAvatarClick={console.log}
-        height={10}
-        data={[
-          { name: "Lars D", src: getAdorableAvatar("LarsD") },
-          { name: "Konstantin R", src: getAdorableAvatar("KR") },
-          { name: "Noah S", src: getAdorableAvatar("NoahS") },
-          { name: "Tim T", src: getAdorableAvatar("TT") },
-          { name: "Max Mustermann", src: getAdorableAvatar("M") },
-          { name: "John Doe" }
-        ]}
-        size="small"
-      />
-    </div>
-  );
-  const styles = {
-    cardWrapper: {
-      borderRadius: 2,
-      border: "1px solid rgba(96,115,137,0.12)",
-      backgroundColor: "#ffffff",
-      boxShadow: "none",
-      padding: "9px 9px 0px 9px",
-      minHeight: 40,
-      marginBottom: 8
-    },
-    columnStyle: {
-      border: "none",
-      borderRadius: 2,
-      paddingBottom: 0,
-      userSelect: "none",
-      background: "rgb(255, 255, 255)",
-      borderRadius: "8px",
-      borderTopRightRadius: "0px",
-      borderTopLeftRadius: "0px",
-      minHeight: "90vh",
-      maxWidth: "240px"
-    },
-    columnHeaderStyle: {
-      background: "rgb(255, 255, 255)",
-      boxShadow: "rgba(157, 172, 202, 0.45) 0px 1px 19px",
-      borderRadius: "8px",
-      padding: "2px",
-      textAlign: "center",
-      borderTop: "10px solid rgb(96, 125, 139)",
-      marginBottom: "8px",
-      maxWidth: "240px"
-    },
-    columnTitleStyle: {
-      fontWeight: 600,
-      fontSize: 14,
-      color: "#607389",
-      marginRight: 5
-    }
-  };
+  function getrealID(did) {
+    did = did.replace("uc_", "");
+    return parseInt(did);
+  }
 
   return (
     <div style={{ overflowX: "hidden" }}>
       {red}
-
-      <div
-        style={{
-          width: "100%",
-          height: "90px",
-          background: "#587887",
-          flexShrink: 0,
-          padding: "12px",
-          overflow: "hidden"
-        }}
-      >
-        <div
-          style={{
-            color: "white",
-            lineHeight: "80px",
-            fontWeight: 400,
-            fontSize: "34px"
-          }}
-        >
-          {" "}
-          Use cases{" "}
-        </div>
-      </div>
+      <Tabs
+        tabs={tabs}
+        onSelect={(_tab, index) => console.log("Selected Tab", index + 1)}
+      />
 
       <div
         style={{
@@ -256,25 +287,6 @@ function Kanban() {
           height: "100%"
         }}
       >
-        <div>
-          {board.length != 0 && (
-            <ReactKanban
-              style={{
-                height: "80vh",
-                minWidth: "50vw",
-                width: "55vw",
-                maxWidth: "60vw"
-              }}
-              columns={board}
-              renderCard={renderCard}
-              columnStyle={styles.columnStyle}
-              columnHeaderStyle={styles.columnHeaderStyle}
-              onDragEnd={info => {
-                cardChange(info);
-              }}
-            />
-          )}
-        </div>
         <div
           style={{
             width: "100%",

@@ -4,7 +4,7 @@ function UserMgmtIcon() {
   return (
     <svg
       width={36}
-      height={38}
+      height={32}
       viewBox="0 0 36 38"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
