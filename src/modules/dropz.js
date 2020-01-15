@@ -3,9 +3,7 @@ import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import TableTree from "@atlaskit/table-tree";
 
-function MyDropzone() {
-  type ExampleItemData = { title: string, numbering: string };
-
+function MyDropzone(props) {
   const Title = (props: ExampleItemData) => <span>{props.title}</span>;
   const Numbering = (props: ExampleItemData) => <span>{props.numbering}</span>;
 
@@ -15,13 +13,9 @@ function MyDropzone() {
     const data = new FormData();
     data.append("file", acceptedFiles[0]);
 
-    axios.post(
-      "https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/uc/1/files",
-      data,
-      {
-        // receive two    parameter endpoint url ,form data
-      }
-    );
+    axios.post("https://api.rpa.rocks/uc/1/files", data, {
+      // receive two    parameter endpoint url ,form data
+    });
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -40,7 +34,7 @@ function MyDropzone() {
     >
       <input {...getInputProps()} />
       {isDragActive ? (
-        <p>Drop the files here ...</p>
+        <p>Drop the files here ... {props.usecase}</p>
       ) : (
         <div>
           <TableTree

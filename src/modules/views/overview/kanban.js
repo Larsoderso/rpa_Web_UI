@@ -35,6 +35,114 @@ function Kanban() {
   const [comments, setComments] = useState([
     { Author: "user@rpa.rocks", text: "tesckoooomentar" }
   ]);
+  const tabs = [
+    { label: "Kanban", content: <div>One</div> },
+    { label: "Matrix", content: <div>Two</div> }
+  ];
+
+  useEffect(() => getTeams(), []);
+
+  function getTeams() {
+    console.log("--- Load teams----");
+    axios
+      .get(
+        `https://api.rpa.rocks/teams`
+        // { user }
+      )
+      .then(res => {
+        console.log(res.data);
+        setTeamListing(res.data);
+
+        console.log("teams----", teamListing);
+      });
+  }
+
+  function getBoard() {
+    console.log("--- Load Board----");
+    axios
+      .get(
+        `https://api.rpa.rocks/board`
+        // { user }
+      )
+      .then(res => {
+        console.log(res);
+        console.log(res.data.Board);
+
+        for (var i = 0; i < 5; i++) {
+          if (res.data.Board[i].rows == null) {
+            res.data.Board[i].rows = [];
+          }
+        }
+        setboard(res.data.Board);
+
+        console.log(board);
+      });
+  }
+
+  const columns = [
+    {
+      id: 1,
+      title: "Idea",
+      rows: [
+        {
+          id: "row1",
+          Name: "Kundenprojekt Test",
+          Description: "",
+          Status: 1,
+          Team: null
+        }
+      ]
+    },
+    {
+      id: 2,
+      title: "Concept",
+      rows: []
+    },
+    {
+      id: 3,
+      title: "Development",
+      rows: []
+    },
+    {
+      id: 4,
+      title: "Testing",
+      rows: []
+    },
+    {
+      id: 5,
+      title: "Operation",
+      rows: []
+    }
+  ];
+
+  function cardChange(info) {
+    console.log("cardchange", info);
+
+    if (info.type == "ROW") {
+      console.log("cardchange", info);
+      console.log("dest", info.destination.droppableId);
+
+      var did = info.draggableId;
+      did = did.replace("uc_", "");
+      var did_final = parseInt(did);
+      console.log("did", did_final);
+
+      axios
+        .put(`https://api.rpa.rocks/uc/1/status`, {
+          Uc: did_final,
+          Status: info.destination.droppableId
+        })
+        .then(res => {
+          console.log(res);
+          console.log(res.data);
+        });
+    }
+  }
+
+  function getrealID(did) {
+    did = did.replace("uc_", "");
+    return parseInt(did);
+  }
   const renderCard = row => (
     <div
       style={{
@@ -112,33 +220,48 @@ function Kanban() {
     }
   };
 
-  const tabs = [
-    {
-      label: "Kanban",
-      content: (
-        <div style={{ height: "100vh", width: "100%" }}>
-          <div
-            style={{
-              width: "100%",
-              height: "90px",
-              background: "#587887",
-              flexShrink: 0,
-              padding: "12px",
-              overflow: "hidden"
-            }}
-          >
-            <div
-              style={{
-                color: "white",
-                lineHeight: "80px",
-                fontWeight: 400,
-                fontSize: "34px"
-              }}
-            >
-              {" "}
-              Use cases{" "}
-            </div>
-          </div>
+  return (
+    <div style={{ overflowX: "hidden" }}>
+      {red}
+      <Tabs
+        tabs={tabs}
+        onSelect={(_tab, index) => console.log("Selected Tab", index + 1)}
+      />
+
+      <div
+        style={{
+          width: "100%",
+          height: "90px",
+          background: "#587887",
+          flexShrink: 0,
+          padding: "12px",
+          overflow: "hidden"
+        }}
+      >
+        <div
+          style={{
+            color: "white",
+            lineHeight: "80px",
+            fontWeight: 400,
+            fontSize: "34px"
+          }}
+        >
+          {" "}
+          Use cases{" "}
+        </div>
+      </div>
+
+      <div
+        style={{
+          width: "100%",
+          display: "grid",
+          gridTemplateColumns: "1fr",
+          marginTop: "15px",
+          paddingBottom: "8px",
+          height: "100%"
+        }}
+      >
+        <div style={{ height: "100vh" }}>
           {board.length != 0 && (
             <ReactKanban
               style={{
@@ -157,136 +280,6 @@ function Kanban() {
             />
           )}
         </div>
-      )
-    },
-    { label: "Matrix", content: <div>Two</div> }
-  ];
-
-  useEffect(() => getTeams(), []);
-
-  function getTeams() {
-    console.log("--- Load teams----");
-    axios
-      .get(
-        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/teams`
-        // { user }
-      )
-      .then(res => {
-        console.log(res.data);
-        setTeamListing(res.data);
-
-        console.log("teams----", teamListing);
-      });
-  }
-
-  function getBoard() {
-    console.log("--- Load Board----");
-    axios
-      .get(
-        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/board`
-        // { user }
-      )
-      .then(res => {
-        console.log(res);
-        console.log(res.data.Board);
-
-        for (var i = 0; i < 5; i++) {
-          if (res.data.Board[i].rows == null) {
-            res.data.Board[i].rows = [];
-          }
-        }
-        setboard(res.data.Board);
-
-        console.log(board);
-      });
-  }
-
-  const columns = [
-    {
-      id: 1,
-      title: "Idea",
-      rows: [
-        {
-          id: "row1",
-          Name: "Kundenprojekt Test",
-          Description: "",
-          Status: 1,
-          Team: null
-        }
-      ]
-    },
-    {
-      id: 2,
-      title: "Concept",
-      rows: []
-    },
-    {
-      id: 3,
-      title: "Development",
-      rows: []
-    },
-    {
-      id: 4,
-      title: "Testing",
-      rows: []
-    },
-    {
-      id: 5,
-      title: "Operation",
-      rows: []
-    }
-  ];
-
-  function cardChange(info) {
-    console.log("cardchange", info);
-
-    if (info.type == "ROW") {
-      console.log("cardchange", info);
-      console.log("dest", info.destination.droppableId);
-
-      var did = info.draggableId;
-      did = did.replace("uc_", "");
-      var did_final = parseInt(did);
-      console.log("did", did_final);
-
-      axios
-        .put(
-          `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/uc/1/status`,
-          {
-            Uc: did_final,
-            Status: info.destination.droppableId
-          }
-        )
-        .then(res => {
-          console.log(res);
-          console.log(res.data);
-        });
-    }
-  }
-
-  function getrealID(did) {
-    did = did.replace("uc_", "");
-    return parseInt(did);
-  }
-
-  return (
-    <div style={{ overflowX: "hidden" }}>
-      {red}
-      <Tabs
-        tabs={tabs}
-        onSelect={(_tab, index) => console.log("Selected Tab", index + 1)}
-      />
-
-      <div
-        style={{
-          width: "100%",
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          marginTop: "15px",
-          paddingBottom: "8px",
-          height: "100%"
-        }}
-      >
         <div
           style={{
             width: "100%",

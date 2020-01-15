@@ -102,13 +102,14 @@ function SingleUseCase(props) {
   const [teams, updateTeams] = useState([{}]);
 
   const [commentBox, setCommentbox] = useState("");
+  const [evaluations, setEvaluations] = useState(undefined);
 
   //update dialog
 
   const StatusArray = [
     "Idea",
     "Concept",
-    "Devleopment",
+    "Development",
     "Testing",
     "Operation"
   ];
@@ -117,6 +118,8 @@ function SingleUseCase(props) {
 
   useEffect(() => setJWT(parseJwt(localStorage.getItem("knock"))), []);
   useEffect(() => getComments(props), []);
+  useEffect(() => getEvaluations(props), []);
+
   useEffect(() => console.log(props), []);
 
   const actions_update = [
@@ -136,9 +139,7 @@ function SingleUseCase(props) {
     console.log("--- Load comments----");
     axios
       .get(
-        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/uc/` +
-          props.props.match.params.id +
-          `/comments`
+        `https://api.rpa.rocks/uc/` + props.props.match.params.id + `/comments`
         // { user }
       )
       .then(res => {
@@ -148,13 +149,29 @@ function SingleUseCase(props) {
         setComments(res.data);
       });
   }
+
+  function getEvaluations() {
+    console.log("--- Load Evaluations----");
+    axios
+      .get(
+        `https://api.rpa.rocks/uc/` +
+          props.props.match.params.id +
+          `/evaluatiions`
+        // { user }
+      )
+      .then(res => {
+        console.log(res);
+        console.log("Evaluations", res.data);
+
+        setEvaluations(res.data);
+      });
+  }
+
   function getUseCase() {
     console.log("--- Load comments----");
     axios
       .get(
-        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/uc/` +
-          props.props.match.params.id +
-          `/`
+        `https://api.rpa.rocks/uc/` + props.props.match.params.id + `/`
         // { user }
       )
       .then(res => {
@@ -170,9 +187,7 @@ function SingleUseCase(props) {
     console.log("--- Load comments----");
     axios
       .delete(
-        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/uc/` +
-          props.props.match.params.id +
-          `/`
+        `https://api.rpa.rocks/uc/` + props.props.match.params.id + `/`
         // { user }
       )
       .then(res => {
@@ -184,18 +199,19 @@ function SingleUseCase(props) {
   function newComment() {
     const d = {
       text: commentBox,
-      author: 1,
+      author: parsedJWT.uid,
       usecase: props.props.match.params.id
     };
     axios
       .post(
-        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/uc/1/comments`,
+        `https://api.rpa.rocks/uc/` + props.props.match.params.id + `/comments`,
         d
         // { user }
       )
       .then(res => {
         console.log(res);
         console.log(res.data);
+
         getComments();
       });
   }
@@ -236,7 +252,7 @@ function SingleUseCase(props) {
     setStatus(val);
     axios
       .put(
-        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/uc/` +
+        `https://api.rpa.rocks/uc/` +
           props.props.match.params.id +
           `
 /status`,
@@ -346,59 +362,60 @@ function SingleUseCase(props) {
           </div>
 
           <div style={{ paddingLeft: "12px", paddingTop: "22px" }}>
-            <FlexibleWidthXYPlot height={300}>
+            <FlexibleWidthXYPlot xDomain={[0, 5]} yDomain={[0, 5]} height={300}>
               <VerticalGridLines />
               <HorizontalGridLines />
               <ChartLabel
-                text="hoch"
+                text="high"
                 className="alt-x-label"
                 includeMargin={false}
                 xPercent={0.9}
                 yPercent={0.95}
               />
               <ChartLabel
-                text="hoch"
+                text="high"
                 className="alt-y-label"
                 includeMargin={false}
                 xPercent={0.005}
                 yPercent={0.1}
               />
-              <XAxis title="Komplexität" position="middle" />
-              <YAxis title="Nutzen" position="middle" />
-              <MarkSeries
-                className="mark-series-example"
-                strokeWidth={2}
-                opacity="0.8"
-                sizeRange={[5, 15]}
-                color="#172B4D"
-                fill="#172B4D"
-                data={[
-                  {
-                    x: -1,
-                    y: 10,
-                    size: 30
-                  },
-                  { x: 1.7, y: 12, size: 10, fill: "#FFAB00" },
-                  { x: 2, y: 5, size: 1, fill: "#FFAB00" },
-                  { x: 3, y: 15, size: 12, fill: "#FFAB00" },
-                  { x: 2.5, y: 7, size: 4, fill: "#FFAB00" }
-                ]}
-              />
-              <LabelSeries
-                allowOffsetToBeReversed
-                data={[
-                  { x: -1, y: 10, size: 30, label: "UC1", xOffset: 35 },
-                  { x: 1.7, y: 12, size: 10, label: "UC1", xOffset: 25 },
-                  { x: 2, y: 5, size: 1, fill: "#FFAB00" },
-                  { x: 3, y: 15, size: 12, fill: "#FFAB00" },
-                  { x: 2.5, y: 7, size: 4, fill: "#FFAB00" }
-                ]}
-              />
+              <XAxis title="Complexity" position="middle" />
+              <YAxis title="Benefit" position="middle" />
+
+              {evaluations != undefined && (
+                <MarkSeries
+                  className="mark-series-example"
+                  strokeWidth={2}
+                  opacity="0.8"
+                  sizeRange={[5, 15]}
+                  color="#172B4D"
+                  fill="#172B4D"
+                  data={[
+                    {
+                      x: evaluations.Complexity.Value,
+                      y: evaluations.Use.Value,
+                      size: 10
+                    }
+                  ]}
+                />
+              )}
+              {evaluations != undefined && (
+                <LabelSeries
+                  allowOffsetToBeReversed
+                  data={[
+                    { x: -1, y: 10, size: 30, label: "UC1", xOffset: 35 },
+                    { x: 1.7, y: 12, size: 10, label: "UC1", xOffset: 25 },
+                    { x: 2, y: 5, size: 1, fill: "#FFAB00" },
+                    { x: 3, y: 15, size: 12, fill: "#FFAB00" },
+                    { x: 2.5, y: 7, size: 4, fill: "#FFAB00" }
+                  ]}
+                />
+              )}
             </FlexibleWidthXYPlot>
 
             <div style={{ fontSize: "20px", color: "#42526d" }}>Files</div>
           </div>
-          <MyDropzone />
+          <MyDropzone props={{ usecase: props.props.match.params.id }} />
         </div>
         <div style={{ background: "#f1f7f9", width: "100%", height: "100vh" }}>
           <div

@@ -117,7 +117,7 @@ function NewUseCase() {
     console.log("--- Load teams----");
     axios
       .get(
-        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/teams`
+        `https://api.rpa.rocks/teams`
         // { user }
       )
       .then(res => {
@@ -151,7 +151,7 @@ function NewUseCase() {
 
     axios
       .post(
-        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/uc/`,
+        `https://api.rpa.rocks/uc/`,
         data
         // { user }
       )
