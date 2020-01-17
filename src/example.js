@@ -827,7 +827,6 @@ function UI() {
 
             <PrivateRoute
               exact
-              exact
               path={`${path}/`}
               component={() => <Kanban />}
             />
@@ -860,6 +859,11 @@ function UI() {
             <Route path={`${path}/team/new`}>
               <NewTeam />{" "}
             </Route>
+            <PrivateRoute
+              exact
+              path={`${path}/teams/:id`}
+              component={props => <NewTeam props={props} />}
+            />
 
             <Route path={`${path}/code/example`}>
               <Example />{" "}

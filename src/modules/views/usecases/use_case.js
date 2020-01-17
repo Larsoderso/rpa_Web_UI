@@ -86,12 +86,15 @@ function SingleUseCase(props) {
   const [pword, setpword] = useState("");
 
   const [status, setStatus] = useState(1);
-
+  //Modals
   const [deleteModal, setDeleteModal] = useState(false);
   const [updateModal, setupdateModal] = useState(false);
+  const [updateRatingsModal, setupdateRatingsModal] = useState(false);
+
   const [name, setname] = useState("Name the use case");
   const [description, setdescription] = useState("");
   const [team, setteam] = useState("");
+  const [teamListing, setTeamListing] = useState("");
 
   const [Uc, setUc] = useState({});
 
@@ -104,7 +107,23 @@ function SingleUseCase(props) {
   const [commentBox, setCommentbox] = useState("");
   const [evaluations, setEvaluations] = useState(undefined);
 
+  const [UpdateName, setUpdateName] = useState();
+  const [UpdateDescription, setUpdateDescription] = useState();
+  const [selected_teams, setteams] = useState([]);
+
+  // Evaluations
+  const [frequency, setfrequency] = useState(3);
+  const [duration, setDuration] = useState(3);
+  const [fte, setFTE] = useState(3);
+  const [quality, setQuality] = useState(3);
+  const [func, setFunc] = useState(3);
+  const [tech, setTech] = useState(3);
+
+  //Redirect
+  const [red, setredir] = useState(<div />);
   //update dialog
+
+  const [files, setfiles] = useState([]);
 
   const StatusArray = [
     "Idea",
@@ -117,8 +136,11 @@ function SingleUseCase(props) {
   useEffect(() => getUseCase(props), []);
 
   useEffect(() => setJWT(parseJwt(localStorage.getItem("knock"))), []);
+  useEffect(() => getAllFiles(), []);
+
   useEffect(() => getComments(props), []);
   useEffect(() => getEvaluations(props), []);
+  useEffect(() => getTeams(), []);
 
   useEffect(() => console.log(props), []);
 
@@ -134,6 +156,37 @@ function SingleUseCase(props) {
       onClick: () => console.log("hey")
     }
   ];
+  const actions_evaluations = [
+    {
+      text: "Cancel",
+      appearance: "default",
+      onClick: () => setupdateRatingsModal(false)
+    },
+    {
+      text: "Update evaluation",
+      appearance: "primary",
+      onClick: () => console.log("hey")
+    }
+  ];
+
+  function getTeams() {
+    console.log("--- Load teams----");
+    axios
+      .get(
+        `https://api.rpa.rocks/teams`
+        // { user }
+      )
+      .then(res => {
+        console.log(res.data);
+        var conv = [];
+        for (var i = 0; i < res.data.length; i++) {
+          conv.push({ id: res.data[i].ID, name: res.data[i].Name });
+        }
+
+        setTeamListing(conv);
+        console.log("teams----", teams);
+      });
+  }
 
   function getComments() {
     console.log("--- Load comments----");
@@ -166,14 +219,23 @@ function SingleUseCase(props) {
         setEvaluations(res.data);
       });
   }
+  function getAllFiles() {
+    console.log("--- Load Files----");
+    axios
+      .get(`https://api.rpa.rocks/uc/` + props.props.match.params.id + `/files`)
+      .then(res => {
+        console.log(res);
+
+        setfiles(res.data);
+
+        console.log("files", files);
+      });
+  }
 
   function getUseCase() {
     console.log("--- Load comments----");
     axios
-      .get(
-        `https://api.rpa.rocks/uc/` + props.props.match.params.id + `/`
-        // { user }
-      )
+      .get(`https://api.rpa.rocks/uc/` + props.props.match.params.id + `/`)
       .then(res => {
         console.log(res);
         console.log(res.data);
@@ -181,6 +243,8 @@ function SingleUseCase(props) {
         setUc(res.data);
 
         setStatus(res.data.Status);
+        setUpdateName(res.data.Name);
+        setUpdateDescription(res.data.Description);
       });
   }
   function dropUseCase() {
@@ -220,6 +284,9 @@ function SingleUseCase(props) {
       <Button onClick={() => setupdateModal(true)} appearance="primary">
         Update
       </Button>{" "}
+      <Button onClick={() => setupdateRatingsModal(true)} appearance="primary">
+        Update evaluations
+      </Button>{" "}
       {parsedJWT.role == "admin" && (
         <Button onClick={() => setDeleteModal(true)} appearance="danger">
           Delete
@@ -243,7 +310,19 @@ function SingleUseCase(props) {
 
   const breadcrumbs = (
     <BreadcrumbsStateless onExpand={() => {}}>
-      <BreadcrumbsItem text="Use Cases" key="Some project" />
+      <BreadcrumbsItem
+        onClick={() =>
+          setredir(
+            <Redirect
+              to={{
+                pathname: "/ui/"
+              }}
+            />
+          )
+        }
+        text="Use Cases"
+        key="Some project"
+      />
       <BreadcrumbsItem text={Uc.Name} key="Parent page" />
     </BreadcrumbsStateless>
   );
@@ -267,11 +346,11 @@ function SingleUseCase(props) {
       });
   }
 
-  function getFiles() {}
   function onInputChange() {}
 
   return (
     <div style={{ display: "flex", width: "100%" }}>
+      {red}
       <ModalTransition>
         {deleteModal && (
           <Modal
@@ -294,19 +373,19 @@ function SingleUseCase(props) {
             <div>
               Name <br />
               <TextField
-                placeholder="Describe your Use Case"
-                value={description}
+                placeholder="Name"
+                value={UpdateName}
                 onChange={e => {
-                  setdescription(e.target.value);
+                  setUpdateName(e.target.value);
                 }}
               />
               <br />
               Description <br />
               <TextArea
                 placeholder="Describe your Use Case"
-                value={description}
+                value={UpdateDescription}
                 onChange={e => {
-                  setdescription(e.target.value);
+                  setUpdateDescription(e.target.value);
                 }}
               />
               <br />
@@ -314,19 +393,70 @@ function SingleUseCase(props) {
               <br />
               <UserPicker
                 placeholder="Enter Team"
-                value={team}
+                value={selected_teams}
                 fieldId="example"
-                options={[{ name: "Team A", value: "TEAM A" }]}
+                options={teams}
                 onChange={(value, action) => {
                   setteam(value);
                 }}
                 onInputChange={onInputChange}
+                isMulti
               />
             </div>
-            <EvaluationItem question="Question 1" bottom={1} top={10} />
-            <EvaluationItem question="Question 1" bottom={1} top={10} />
-            <EvaluationItem question="Question 1" bottom={1} top={10} />
-            <EvaluationItem question="Question 1" bottom={1} top={10} />
+          </Modal>
+        )}
+      </ModalTransition>
+
+      <ModalTransition>
+        {updateRatingsModal && (
+          <Modal
+            width="large"
+            actions={actions_evaluations}
+            onClose={() => setupdateRatingsModal(false)}
+            heading="Update use case"
+          >
+            <EvaluationItem
+              question="Frequenz"
+              value={frequency}
+              onChange={e => setfrequency(e)}
+              bottom={1}
+              top={5}
+            />
+            <EvaluationItem
+              question="Duration"
+              value={duration}
+              onChange={e => setDuration(e)}
+              bottom={1}
+              top={5}
+            />
+            <EvaluationItem
+              question="FTE"
+              value={fte}
+              onChange={e => setFTE(e)}
+              bottom={1}
+              top={5}
+            />
+            <EvaluationItem
+              question="Quality"
+              value={quality}
+              onChange={e => setQuality(e)}
+              bottom={1}
+              top={5}
+            />
+            <EvaluationItem
+              question="Functional complexity"
+              value={func}
+              onChange={e => setFunc(e)}
+              bottom={1}
+              top={5}
+            />
+            <EvaluationItem
+              value={tech}
+              onChange={e => setTech(e)}
+              question="Technical complexity"
+              bottom={1}
+              top={5}
+            />{" "}
           </Modal>
         )}
       </ModalTransition>
@@ -415,7 +545,10 @@ function SingleUseCase(props) {
 
             <div style={{ fontSize: "20px", color: "#42526d" }}>Files</div>
           </div>
-          <MyDropzone props={{ usecase: props.props.match.params.id }} />
+          <MyDropzone
+            uploadedFiles={() => getAllFiles()}
+            props={{ usecase: props.props.match.params.id, files: files }}
+          />
         </div>
         <div style={{ background: "#f1f7f9", width: "100%", height: "100vh" }}>
           <div

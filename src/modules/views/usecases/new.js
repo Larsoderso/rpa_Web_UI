@@ -156,7 +156,7 @@ function NewUseCase() {
         // { user }
       )
       .then(res => {
-        toast.notify("Hello world!");
+        toast.notify("Usecase succesfully created!");
         console.log(res);
         console.log(res.data);
       });

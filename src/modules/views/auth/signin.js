@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useState } from "react";
+import React, { Component, Fragment, useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -26,12 +26,16 @@ import jwtDecode from "jwt-decode";
 
 function SignInPage() {
   // Send Login Credentials to Server
+  const [parsedJWT, setJWT] = useState(false);
 
   // Variablen
   const [anmloading, setanmloading] = useState(false);
   const [email, setemail] = useState("");
   const [pword, setpword] = useState("");
   const [red, setredir] = useState(<div />);
+  const [logoutp, setlogoutp] = useState(false);
+
+  useEffect(() => checkjwt(), []);
 
   function parseJwt(token) {
     var base64Url = token.split(".")[1];
@@ -48,6 +52,14 @@ function SignInPage() {
     return JSON.parse(jsonPayload);
   }
 
+  function checkjwt() {
+    console.log(localStorage.getItem("knock"));
+    if (localStorage.getItem("knock") != null) {
+      //  localStorage.removeItem("knock");
+      setlogoutp(true);
+      console.log("logged out");
+    }
+  }
   function SendLoginCredentials() {
     setanmloading(true);
 
@@ -84,7 +96,14 @@ function SignInPage() {
   }
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div
+      style={{
+        display: "flex",
+        height: "100vh",
+        width: "100vw",
+        overflow: "hidden"
+      }}
+    >
       <div>
         <PublicHeader />
         {red}
@@ -125,7 +144,7 @@ function SignInPage() {
             paddingLeft: "22px",
             paddingRight: "22px",
             paddingBottom: "42px",
-            paddingTop: "62px",
+            paddingTop: "22px",
             width: "432px",
             marginLeft: "-216px",
             position: "absolute",
@@ -137,11 +156,30 @@ function SignInPage() {
             boxShadow: "0px 1px 4px rgba(0, 0, 0, 0.11)"
           }}
         >
-          <div style={{ paddingLeft: "12px", paddingTop: "22px" }}>
+          {logoutp && (
+            <div
+              style={{
+                padding: 12,
+                paddingTop: 22,
+                paddingBottom: 22,
+                background: "#0096884a",
+                color: "#009688",
+                borderRadius: 6,
+                marginBottom: 10,
+                fontWeight: 500,
+                boxSizing: "border-box",
+                marginLeft: 12
+              }}
+            >
+              Succesfully logged out
+            </div>
+          )}
+
+          <div style={{ paddingLeft: "12px", paddingTop: "12px" }}>
             <TextField
               value={email}
               onChange={e => setemail(e.target.value)}
-              placeholder="max.mustermann@deteon.com"
+              placeholder="john.doe@rpa.rocks"
               autoComplete="off"
             />
             <div style={{ marginTop: "12px" }}>
@@ -163,7 +201,7 @@ function SignInPage() {
                   onClick={SendLoginCredentials}
                   isLoading={anmloading}
                 >
-                  Anmelden
+                  Sign in
                 </Button>
               </ButtonGroup>
             </FormFooter>

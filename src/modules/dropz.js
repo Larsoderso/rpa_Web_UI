@@ -2,20 +2,71 @@ import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import TableTree from "@atlaskit/table-tree";
-
+import { DynamicTableStateless } from "@atlaskit/dynamic-table";
+import FolderFilledIcon from "@atlaskit/icon/glyph/folder-filled";
+import FileIcon from "@atlaskit/icon/glyph/file";
 function MyDropzone(props) {
   const Title = (props: ExampleItemData) => <span>{props.title}</span>;
   const Numbering = (props: ExampleItemData) => <span>{props.numbering}</span>;
+
+  const fileList = [{}, {}];
+  const isLoading = false;
+  const head = {
+    cells: [
+      {
+        key: "name",
+        content: "Name"
+      },
+      {
+        key: "party",
+        content: "Filesize"
+      },
+      {
+        key: "party",
+        content: "Created"
+      }
+    ]
+  };
+
+  const rows = props.props.files.map((file, index) => ({
+    key: 1,
+    cells: [
+      {
+        content: (
+          <div style={{ display: "flex" }}>
+            <FileIcon />{" "}
+            <div style={{ paddingLeft: "12px", lineHeight: "20px" }}>
+              {file.Filename}
+            </div>
+          </div>
+        )
+      },
+
+      {
+        content: <div>128KB</div>
+      },
+      {
+        content: <div>{new Date(file.Created).toLocaleDateString("de-De")}</div>
+      }
+    ]
+  }));
 
   const onDrop = useCallback(acceptedFiles => {
     console.log(acceptedFiles);
     // Do something with the files
     const data = new FormData();
     data.append("file", acceptedFiles[0]);
-
-    axios.post("https://api.rpa.rocks/uc/1/files", data, {
-      // receive two    parameter endpoint url ,form data
-    });
+    axios
+      .post(
+        "https://api.rpa.rocks/uc/" + props.props.usecase + "/files",
+        data,
+        {
+          // receive two    parameter endpoint url ,form data
+        }
+      )
+      .then(() => {
+        props.uploadedFiles();
+      });
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -37,57 +88,11 @@ function MyDropzone(props) {
         <p>Drop the files here ... {props.usecase}</p>
       ) : (
         <div>
-          <TableTree
-            style={{ width: "580px" }}
-            headers={["Filename/Foldername", "Filetype"]}
-            columns={[Title, Numbering]}
-            columnWidths={["200px", "200px"]}
-            items={[
-              {
-                id: "1",
-                content: {
-                  title: "Ordner",
-                  numbering: "1"
-                },
-                hasChildren: true,
-                children: [
-                  {
-                    id: "1.1.",
-                    content: {
-                      title: "Datei",
-                      numbering: "1.1"
-                    },
-                    hasChildren: false
-                  },
-                  {
-                    id: "1.2",
-                    content: {
-                      title: "Second child",
-                      numbering: "1.2"
-                    },
-                    hasChildren: true,
-                    children: [
-                      {
-                        id: "1.2.1",
-                        content: {
-                          title: "First grandchild",
-                          numbering: "1.2.1"
-                        }
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                id: "2",
-                content: {
-                  title: "Datei",
-                  numbering: "2"
-                },
-                hasChildren: false
-              }
-            ]}
-          />{" "}
+          <DynamicTableStateless
+            head={head}
+            rows={rows}
+            isLoading={isLoading}
+          />
           <p>Drag 'n' drop some files here, or click to select files</p>
         </div>
       )}

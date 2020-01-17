@@ -33,14 +33,6 @@ import { DynamicTableStateless } from "@atlaskit/dynamic-table";
 import PageHeader from "@atlaskit/page-header";
 import axios from "axios";
 
-const breadcrumbs = (
-  <BreadcrumbsStateless onExpand={() => {}}>
-    <BreadcrumbsItem text="use cases" key="Some project" />
-
-    <BreadcrumbsItem text="New use case" key="Parent page" />
-  </BreadcrumbsStateless>
-);
-
 const ReadView = styled.div`
   font-size: 24px;
   font-weight: 500;
@@ -68,6 +60,13 @@ const EditView = styled.input`
 
 function NewTeam() {
   // Send Login Credentials to Server
+  const breadcrumbs = (
+    <BreadcrumbsStateless onExpand={() => {}}>
+      <BreadcrumbsItem text="use cases" key="Some project" />
+
+      <BreadcrumbsItem text="New use case" key="Parent page" />
+    </BreadcrumbsStateless>
+  );
 
   const head = {
     cells: [
@@ -170,29 +169,11 @@ function NewTeam() {
     };
     axios
       .post(
-        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/teams`,
+        `https://api.rpa.rocks/teams`,
         data
         // { user }
       )
       .then(res => {
-        console.log(res);
-        console.log(res.data);
-      });
-  }
-
-  function SendLoginCredentials() {
-    const user = {
-      mail: email,
-      password: pword
-    };
-
-    axios
-      .get(
-        `https://9001-f0b438fa-b62e-477b-a8bb-e37c54fcfe8a.ws-eu01.gitpod.io/`
-        // { user }
-      )
-      .then(res => {
-        setanmloading(false);
         console.log(res);
         console.log(res.data);
       });

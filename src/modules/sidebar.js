@@ -250,7 +250,7 @@ function SideBar() {
     console.log("--- Load teams----");
     axios
       .get(
-        `https://7080-fb9537d9-26b2-4e22-a59c-3c743b0f5499.ws-eu01.gitpod.io/teams`
+        `https://api.rpa.rocks/teams`
         // { user }
       )
       .then(res => {
@@ -288,7 +288,7 @@ function SideBar() {
             return (
               <Link
                 onClick={onClose}
-                to="/ui/teams/1"
+                to={"/ui/teams/" + object.ID}
                 style={{
                   width: "100%",
                   display: "grid",
@@ -512,7 +512,7 @@ function SideBar() {
                 setredir(
                   <Redirect
                     to={{
-                      pathname: "/ui/"
+                      pathname: "/ui/#"
                     }}
                   />
                 )
