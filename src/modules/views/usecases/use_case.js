@@ -416,7 +416,7 @@ function SingleUseCase(props) {
             heading="Update use case"
           >
             <EvaluationItem
-              question="Frequenz"
+              question="Frequency"
               value={frequency}
               onChange={e => setfrequency(e)}
               bottom={1}

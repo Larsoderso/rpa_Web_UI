@@ -75,6 +75,8 @@ import RecurringJobs from "./icons/rjobs";
 import SideBar from "./modules/sidebar";
 import NewUseCase from "./modules/views/usecases/new";
 import NewTeam from "./modules/views/user_mgmt/newTeam";
+import UpdateTeam from "./modules/views/user_mgmt/updateTeam";
+
 import ListUseCases from "./modules/views/usecases/list";
 import SingleUseCase from "./modules/views/usecases/use_case";
 import KanbanBoard from "./modules/views/overview/kanban";
@@ -862,7 +864,7 @@ function UI() {
             <PrivateRoute
               exact
               path={`${path}/teams/:id`}
-              component={props => <NewTeam props={props} />}
+              component={props => <UpdateTeam props={props} />}
             />
 
             <Route path={`${path}/code/example`}>

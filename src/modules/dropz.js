@@ -28,6 +28,21 @@ function MyDropzone(props) {
     ]
   };
 
+  function downloadEmployeeData() {
+    fetch("https://ipv4.download.thinkbroadband.com/10MB.zip").then(
+      response => {
+        response.blob().then(blob => {
+          let url = window.URL.createObjectURL(blob);
+          let a = document.createElement("a");
+          a.href = url;
+          a.download = "employees.json";
+          a.click();
+        });
+        //window.location.href = response.url;
+      }
+    );
+  }
+
   const rows = props.props.files.map((file, index) => ({
     key: 1,
     cells: [
@@ -47,6 +62,31 @@ function MyDropzone(props) {
       },
       {
         content: <div>{new Date(file.Created).toLocaleDateString("de-De")}</div>
+      },
+      {
+        content: (
+          <a href={"https://api.rpa.rocks/files/" + file.ID}>
+            <div onClick={() => downloadEmployeeData()}>
+              {" "}
+              <svg
+                width={22}
+                height={22}
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M31 22C30.448 22 30 22.448 30 23V30H2V23C2 22.448 1.552 22 1 22C0.448 22 0 22.448 0 23V31C0 31.552 0.448 32 1 32H31C31.552 32 32 31.552 32 31V23C32 22.448 31.552 22 31 22Z"
+                  fill="#4E7E94"
+                />
+                <path
+                  d="M15.2708 23.707C15.6598 24.092 16.3108 24.096 16.6998 23.707L23.6988 16.807C24.0938 16.416 24.0928 15.783 23.6988 15.393C23.3048 15.002 22.6648 15.002 22.2708 15.393L16.9958 20.593V1C16.9958 0.448 16.5438 0 15.9858 0C15.4278 0 14.9758 0.448 14.9758 1V20.593L9.70081 15.393C9.30581 15.002 8.66681 15.002 8.27281 15.393C7.87781 15.784 7.87781 16.417 8.27281 16.807L15.2708 23.707Z"
+                  fill="#4E7E94"
+                />
+              </svg>
+            </div>
+          </a>
+        )
       }
     ]
   }));
